@@ -8,9 +8,9 @@ import CommunityPage from '../pages/CommunicationPage/page';
 import TimeLine from '../Components/TimeLine';
 import { useEffect } from 'react';
 
-import LoginPage from '../pages/Auth/LoginPage';
 import JoinPage from '../pages/Auth/JoinPage/page';
 import SequencePage from '../pages/Auth/JoinPage/SequencePage';
+import LoginPage from '../pages/Auth/LoginPage/page';
 
 const Routes = () => {
   const location = useLocation();
