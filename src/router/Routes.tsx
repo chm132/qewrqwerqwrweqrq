@@ -15,9 +15,13 @@ import LoginPage from '../pages/Auth/LoginPage/page';
 const Routes = () => {
   const location = useLocation();
 
+  // 페이지 전환 시 path 변화 감지 -> 시점 (0, 0) 시작
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
+
+  // 제작과정에 있는 페이지의 명시 -> url path 앞단 설정
+  // 산하 페이지 나열
 
   return (
     <ReactRouters>
