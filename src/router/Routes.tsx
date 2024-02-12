@@ -8,9 +8,16 @@ import CommunityPage from '../pages/CommunicationPage/page';
 import TimeLine from '../Components/TimeLine';
 import { useEffect } from 'react';
 
-import JoinPage from '../pages/Auth/JoinPage/page';
-import SequencePage from '../pages/Auth/JoinPage/SequencePage';
 import LoginPage from '../pages/Auth/LoginPage/page';
+import CategoryPage from '../pages/CategoryPage/page';
+import SurveyPage from '../pages/SurveyPage/page';
+import SurveyPage2 from '../pages/SurveyPage/SurveyPage2';
+import NotFound from '../pages/NotFound/page';
+import NewsPage from '../pages/NewsPage/page';
+import NewsDetailPage from '../pages/NewsPage/DetailPage';
+import JoinPage from '../pages/Auth/JoinPage/page';
+// import { useSelector } from 'react-redux';
+// import { RootState } from '../redux/store';
 
 const Routes = () => {
   const location = useLocation();
@@ -23,15 +30,25 @@ const Routes = () => {
   // 제작과정에 있는 페이지의 명시 -> url path 앞단 설정
   // 산하 페이지 나열
 
+  // 유저가 currentUser인지
+  // const isCurrentUser = useSelector(
+  //   (state: RootState) => state.currentUser.isLoggedIn,
+  // );
+
   return (
     <ReactRouters>
       <Route path="/" element={<Navbar />}>
         <Route index element={<HomePage />} />
+        <Route path=":category/:categoryId" element={<CategoryPage />} />
+        <Route path=":category/:categoryId/survey" element={<SurveyPage />} />
+        <Route
+          path=":category/:categoryId/survey/2"
+          element={<SurveyPage2 />}
+        />
 
         {/* 인증과정 (로그인, 회원가입) 라우팅입니다. */}
         <Route path="auth">
-          <Route path="join" element={<JoinPage />} />
-          <Route path="join/:stage" element={<SequencePage />} />
+          <Route path="join/:stage" element={<JoinPage />} />
           <Route path="login" element={<LoginPage />} />
         </Route>
 
@@ -40,15 +57,31 @@ const Routes = () => {
           path="community"
           element={
             <TimeLine
-              imgSrc="/assets/TimeLine/community.png"
               title="소통하러 올래"
+              imgSrc="/assets/TimeLine/community.png"
             />
           }
         >
           <Route index element={<CommunityPage />} />
-          <Route path=":postId" element={<DetailPage />} />
+          <Route path=":communityId" element={<DetailPage />} />
+        </Route>
+        {/* 뉴스 페이지 라우팅 */}
+        <Route
+          path="news"
+          element={
+            <TimeLine
+              imgSrc={`/assets/News/news.png`}
+              title={`올래 생활뉴스`}
+            />
+          }
+        >
+          <Route index element={<NewsPage />} />
+          <Route path=":newsId" element={<NewsDetailPage />} />
         </Route>
       </Route>
+
+      {/* 잘못된 경로로 들어왔을 경우 */}
+      <Route path="/*" element={<NotFound />} />
     </ReactRouters>
   );
 };
