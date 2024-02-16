@@ -6,7 +6,7 @@ import 'swiper/css/navigation';
 
 import Header from '../Header';
 import { truncate } from '../../../utils/truncate';
-import { useGetOrderByLessonsQuery } from '../../../redux/apis/categoryApi';
+import { useGetOrderByLessonsQuery } from '../../../redux/apis/lessonApi';
 
 interface RowProps {
   title: string;

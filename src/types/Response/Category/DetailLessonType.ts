@@ -1,4 +1,4 @@
-interface TeacherList {
+export interface TeacherList {
   name: string;
 }
 
@@ -8,6 +8,7 @@ export interface DetailLessonResponse {
   result: {
     title: string;
     description: string;
+    categoryId: number;
     lessonType: string;
     supplies: string;
     price: number;

@@ -2,11 +2,14 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { plusStep } from '../../redux/slices/stepSlice';
 
+import { IoClose } from 'react-icons/io5';
+
 interface LoginModalProps {
   home?: boolean;
+  setShowNonLoginModal?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const LoginModal = ({ home }: LoginModalProps) => {
+const LoginModal = ({ home, setShowNonLoginModal }: LoginModalProps) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -24,9 +27,21 @@ const LoginModal = ({ home }: LoginModalProps) => {
   };
 
   return (
-    <div className="relative">
-      <div className="fixed inset-0 z-10 bg-black/50" />
-      <div className="flex-col gap-4 px-32 pt-16 absolute z-40 flex bg-white h-80 w-[640px] -top-80 left-96 rounded-3xl">
+    <div className={`${home} && 'relative'`}>
+      {home && <div className="fixed inset-0 z-10 bg-black/50" />}
+      <div
+        className={`
+          ${home ? '-top-80 left-96' : 'top-52 left-[30%]'}
+          flex-col gap-4 px-32 pt-16 absolute z-40 flex bg-white h-80 w-[640px] rounded-3xl
+        `}
+      >
+        {setShowNonLoginModal && (
+          <IoClose
+            className="absolute cursor-pointer top-5 right-10"
+            size={28}
+            onClick={() => setShowNonLoginModal(false)}
+          />
+        )}
         <p className="text-[#333333] font-semibold text-2xl">
           로그인 하면 더 편하게 이용할 수 있어요
         </p>
