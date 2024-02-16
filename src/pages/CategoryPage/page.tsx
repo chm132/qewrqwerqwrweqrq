@@ -54,7 +54,7 @@ const CategoryPage = () => {
   }
 
   if (data) {
-    const lessonData = data.result.lessonList;
+    const lessonData = data.result.lessonPreviewDTOList;
 
     content = (
       <div className="bg-gray-100">
@@ -63,10 +63,10 @@ const CategoryPage = () => {
             <LessonCard
               key={index}
               id={lesson.lessonId}
-              img={lesson.file}
+              img={lesson.imageUrl}
               title={lesson.title}
               endDate={lesson.gatherEndDate}
-              startDate={lesson.gatherStartDate}
+              startDate={lesson.lessonStartDate}
               endTime={lesson.lessonEndTime}
               startTime={lesson.lessonStartTime}
             />

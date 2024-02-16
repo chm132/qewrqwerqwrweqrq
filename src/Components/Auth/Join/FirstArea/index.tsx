@@ -65,7 +65,11 @@ const FirstArea = () => {
               확인
             </button>
           </section>
-          <section className="flex items-center justify-between mt-2">
+          <section
+            className={`flex items-center ${
+              !disabled ? 'justify-between' : 'justify-end'
+            }  mt-2`}
+          >
             {!disabled && (
               <p className="text-sm font-medium text-[#17784F]">
                 인증이 완료되었습니다

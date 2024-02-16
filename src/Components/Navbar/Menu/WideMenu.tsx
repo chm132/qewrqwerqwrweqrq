@@ -1,47 +1,142 @@
 import { useState } from 'react';
 import ShortMenu from './ShortMenu';
+import { useNavigate } from 'react-router-dom';
 
 const WideMenu = () => {
+  const navigate = useNavigate();
   const [showClass, setShowClass] = useState(false);
 
   return (
     <>
-      <ul
-        className="flex flex-col items-center"
+      <div className="flex items-center">
+        <div className="w-64 border-r h-[286px] p-8">
+          <p
+            className="cursor-pointer font-semibold text-[rgb(26,26,26)] w-fit"
+            onMouseEnter={() => setShowClass(false)}
+          >
+            올래 교육
+          </p>
+          <ul className="flex flex-col gap-3 font-medium text-[#666666] text-sm mt-8">
+            <li
+              className={`
+              cursor-pointer w-fit hover:font-semibold hover:text-primary01
+              ${showClass && 'text-primary01'}
+            `}
+              onMouseEnter={() => setShowClass(true)}
+            >
+              카테고리
+            </li>
+            <li className="cursor-pointer w-fit">인기 교육</li>
+            <li className="cursor-pointer w-fit">지금 막 뜬 교육</li>
+          </ul>
+        </div>
+
+        <div className="w-64 border-r h-[286px] p-8">
+          <p
+            className="cursor-pointer font-semibold text-[#1A1A1A] w-fit"
+            onClick={() => navigate('/community')}
+          >
+            소통하러 올래
+          </p>
+          <ul className="flex flex-col gap-3 font-medium text-[#666666] text-sm mt-8">
+            <li
+              className="cursor-pointer w-fit"
+              onClick={() =>
+                navigate('/community', {
+                  state: {
+                    category: 'QUESTION',
+                  },
+                })
+              }
+            >
+              궁금해요
+            </li>
+            <li
+              className="cursor-pointer w-fit"
+              onClick={() =>
+                navigate('/community', {
+                  state: {
+                    category: 'TOGETHER',
+                  },
+                })
+              }
+            >
+              같이해요
+            </li>
+          </ul>
+        </div>
+
+        <div className="w-64 border-r h-[286px] p-8">
+          <p
+            className="cursor-pointer font-semibold text-[#1A1A1A] w-fit"
+            onClick={() => navigate('/news')}
+          >
+            올래 생활뉴스
+          </p>
+          <ul className="flex flex-col gap-3 font-medium text-[#666666] text-sm mt-8">
+            <li
+              className="cursor-pointer w-fit"
+              onClick={() =>
+                navigate('/news', {
+                  state: {
+                    category: 'BOARD',
+                  },
+                })
+              }
+            >
+              공지사항
+            </li>
+            <li
+              className="cursor-pointer w-fit"
+              onClick={() =>
+                navigate('/news', {
+                  state: {
+                    category: 'HEALTH',
+                  },
+                })
+              }
+            >
+              건강정보
+            </li>
+            <li
+              className="cursor-pointer w-fit"
+              onClick={() =>
+                navigate('/news', {
+                  state: {
+                    category: 'LIFE',
+                  },
+                })
+              }
+            >
+              생활정보
+            </li>
+            <li className="cursor-pointer w-fit">취업정보</li>
+          </ul>
+        </div>
+
+        <div className="w-64 border-r h-[286px] p-8">
+          <p className="cursor-pointer font-semibold text-[#1A1A1A] w-fit">
+            우리 동네 인기 선생님
+          </p>
+          <ul className="flex flex-col gap-3 font-medium text-[#666666] text-sm mt-8">
+            <li className="cursor-pointer w-fit">카테고리</li>
+            <li className="cursor-pointer w-fit">우리 동네 인기 선생님</li>
+          </ul>
+        </div>
+      </div>
+
+      <section
+        className={`
+      ${
+        showClass
+          ? 'bg-white w-[1025px] absolute top-28 h-72 z-20 border-t border-r'
+          : 'hidden'
+      }
+    `}
         onMouseLeave={() => setShowClass(false)}
       >
-        <li
-          className={`
-            w-full py-5 text-center cursor-pointer 
-            ${showClass && 'bg-amber-900'} 
-            ${showClass && 'text-white'}
-          `}
-          onMouseEnter={() => setShowClass(true)}
-        >
-          카테고리
-        </li>
-        <li className="py-5 cursor-pointer">인기교육</li>
-        <li className="py-5 cursor-pointer">지금 막 뜬 교육</li>
-      </ul>
-      <ul className="flex flex-col items-center">
-        <li className="py-5 cursor-pointer">궁금해요</li>
-        <li className="py-5 cursor-pointer">같이해요</li>
-      </ul>
-      <ul className="flex flex-col items-center">
-        <li className="py-5 cursor-pointer">공지사항</li>
-        <li className="py-5 cursor-pointer">건강정보</li>
-        <li className="py-5 cursor-pointer">생활정보</li>
-        <li className="py-5 cursor-pointer">취업정보</li>
-      </ul>
-      <ul className="flex flex-col items-center">
-        <li className="py-5 cursor-pointer">카테고리</li>
-        <li className="py-5 cursor-pointer">우리 동네 인기 선생님</li>
-      </ul>
-      {showClass && (
-        <div onMouseLeave={() => setShowClass(false)}>
-          <ShortMenu setShowClass={setShowClass} />
-        </div>
-      )}
+        <ShortMenu setShowClass={setShowClass} />
+      </section>
     </>
   );
 };

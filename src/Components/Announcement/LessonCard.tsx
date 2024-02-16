@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { formatTime } from '../../utils/dayjs';
 
 interface LessonCardProps {
@@ -19,14 +20,17 @@ const LessonCard = ({
   endTime,
   startTime,
 }: LessonCardProps) => {
+  const navigate = useNavigate();
   return (
-    <div className="relative w-64 border-2 rounded-[18px] shadow-lg cursor-pointer hover:scale-105 hover:ease-in-out transition-all">
-      {/* <img
-        src={'/assets/Lesson/lessonCard.jpeg'}
+    <div
+      className="relative w-64 border-2 rounded-[18px] shadow-lg cursor-pointer hover:scale-105 hover:ease-in-out transition-all"
+      onClick={() => navigate(`/lesson?lessonId=${id}`)}
+    >
+      <img
+        src={img}
         alt="lesson-img"
-        className="object-cover w-52 h-52"
-      /> */}
-      <section className="w-full h-64 bg-[#D9D9D9] rounded-t-[18px]" />
+        className="object-cover w-64 h-64 rounded-t-[18px]"
+      />
       <section className="w-full p-4">
         <p className="mb-2">{title}</p>
         <p className="text-sm font-medium text-[#666666] mb-2">

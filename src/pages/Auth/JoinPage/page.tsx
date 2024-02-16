@@ -12,8 +12,6 @@ const JoinPage = () => {
 
   const [step, setStep] = useState(1);
 
-  console.log(stage);
-
   useEffect(() => {
     setStep(Number(stage));
   }, [params]);

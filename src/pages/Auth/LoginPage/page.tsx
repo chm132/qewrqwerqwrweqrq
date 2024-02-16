@@ -1,21 +1,29 @@
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useLogin } from '../../../hooks/Auth/useLogin';
-import Input from '../../../Components/Auth/Join/Input';
+
+import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { schema } from '../../../utils/validation';
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { signIn } = useLogin();
 
+  type FormData = Yup.InferType<typeof schema>;
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FieldValues>({
+  } = useForm<FormData>({
     defaultValues: {
-      emailOrPhoneNum: '',
+      email: '',
       password: '',
     },
+    resolver: yupResolver(schema),
+    mode: 'onChange',
+    reValidateMode: 'onChange',
   });
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
@@ -43,21 +51,50 @@ const LoginPage = () => {
         className="flex flex-col justify-center w-[300px] gap-5 mt-10"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <Input
-          id="emailOrPhoneNum"
-          placeholder="이메일 또는 휴대전화번호"
-          register={register}
-          errors={errors}
-          message="이메일 또는 휴대전화번호를 입력해주세요"
-          required
-        />
-        <Input
-          id="password"
-          placeholder="비밀번호"
-          register={register}
-          errors={errors}
-          message="비밀번호를 입력해주세요"
-        />
+        <div className="relative w-full">
+          {errors.email && (
+            <p className="absolute text-sm font-semibold text-rose-500 -bottom-5">
+              {errors.email.message}
+            </p>
+          )}
+          <input
+            {...register('email')}
+            placeholder="이메일"
+            className={`
+                    w-full
+                    px-8 
+                    py-4
+                    font-medium
+                    bg-white
+                    rounded-[20px]
+                    border-2
+                    outline-none
+                    transition
+                `}
+          />
+        </div>
+        <div className="relative w-full">
+          {errors.password && (
+            <p className="absolute text-sm font-semibold text-rose-500 -bottom-5">
+              {errors.password.message}
+            </p>
+          )}
+          <input
+            {...register('password')}
+            placeholder="비밀번호"
+            className={`
+                    w-full
+                    px-8 
+                    py-4
+                    font-medium
+                    bg-white
+                    rounded-[20px]
+                    border-2
+                    outline-none
+                    transition
+                `}
+          />
+        </div>
 
         <button
           type="submit"

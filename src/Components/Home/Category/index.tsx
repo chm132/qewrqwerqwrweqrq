@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-const CATEGORIES = [
+export const CATEGORIES = [
   {
     id: 1,
     img: '/assets/Category/smartPhone.svg',
