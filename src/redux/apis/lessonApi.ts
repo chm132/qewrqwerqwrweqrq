@@ -12,7 +12,7 @@ interface ParamsProps {
 
 export const categoryApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    // 헤더 검색창 get
+    // 헤더에 붙어있는 검색기능
     getHeaderSearch: builder.query<HeaderSearchResponse, string>({
       query: (keyword) => {
         return {
@@ -22,7 +22,7 @@ export const categoryApi = apiSlice.injectEndpoints({
       },
     }),
 
-    // 홈 -> (인기교육, 최근 뜬 교육) get
+    // Row 컴포넌트 담당 기능
     getOrderByLessons: builder.query<RowResponse, string>({
       providesTags: ['Lesson'],
       query: (condition) => {
@@ -33,7 +33,7 @@ export const categoryApi = apiSlice.injectEndpoints({
       },
     }),
 
-    // 카테고리별 교육 get
+    //
     getCategoryLessons: builder.query<CategoryLessonsResponse, ParamsProps>({
       providesTags: ['Lesson'],
       query: ({ categoryId, pageNo, keyword }) => {
@@ -53,8 +53,6 @@ export const categoryApi = apiSlice.injectEndpoints({
         };
       },
     }),
-
-    // 상세 교육 get
     getDetailLesson: builder.query<DetailLessonResponse, number>({
       providesTags: ['Lesson'],
       query: (lessonId) => {
@@ -64,19 +62,16 @@ export const categoryApi = apiSlice.injectEndpoints({
         };
       },
     }),
-
-    // 교육 신청 (회원)
-    applyLesson: builder.mutation({
+    // 회원일때 신청
+    postApply: builder.mutation({
       invalidatesTags: ['Lesson'],
       query: (lessonId) => ({
         method: 'POST',
-        url: `/lesson/${lessonId}/member`,
+        url: `lesson/${lessonId}/member`,
         body: {},
       }),
     }),
-
-    // 교육 삭제 (회원)
-    deleteLesson: builder.mutation({
+    deleteApply: builder.mutation({
       invalidatesTags: ['Lesson'],
       query: (lessonId) => ({
         method: 'DELETE',
@@ -85,7 +80,24 @@ export const categoryApi = apiSlice.injectEndpoints({
       }),
     }),
 
-    // 설문조사 폼 제출
+    // 회원일떄 찜하기, 찜취소
+    postLike: builder.mutation({
+      invalidatesTags: ['Lesson'],
+      query: (lessonId) => ({
+        method: 'POST',
+        url: `/lesson/${lessonId}/like`,
+        body: {},
+      }),
+    }),
+    deleteLike: builder.mutation({
+      invalidatesTags: ['Lesson'],
+      query: (lessonId) => ({
+        method: 'DELETE',
+        url: `/lesson/${lessonId}/like`,
+        body: {},
+      }),
+    }),
+
     postSurvey: builder.mutation({
       invalidatesTags: ['Lesson'],
       query: ({ ...post }) => ({
@@ -102,7 +114,9 @@ export const {
   useGetOrderByLessonsQuery,
   useGetCategoryLessonsQuery,
   useGetDetailLessonQuery,
-  useApplyLessonMutation,
-  useDeleteLessonMutation,
+  useDeleteApplyMutation,
+  usePostLikeMutation,
+  useDeleteLikeMutation,
   usePostSurveyMutation,
+  usePostApplyMutation,
 } = categoryApi;

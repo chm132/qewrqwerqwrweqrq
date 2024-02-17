@@ -1,4 +1,4 @@
-export interface TeacherList {
+interface TeacherList {
   name: string;
 }
 
@@ -25,5 +25,7 @@ export interface DetailLessonResponse {
     limitCount: number;
     currentCount: number;
     lessonTeacherList: TeacherList[];
+    applyStatus: boolean;
+    likeStatus: boolean;
   };
 }

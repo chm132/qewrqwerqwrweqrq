@@ -1,465 +1,700 @@
-import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import { useState, useEffect, useRef } from 'react';
+import { Toggle } from './Toggle';
+import React, { Dispatch, SetStateAction } from 'react';
+import CitySelector from './citySelector';
 
-const FormWrapper = styled.div`
-  margin-bottom: 20px;
-`;
+const currentYear = new Date().getFullYear();
+const startDecade = 1900;
+const decades = Math.ceil((currentYear - startDecade + 1) / 10);
 
-const StyledForm = styled.form`
-  margin: 0 auto;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-`;
-
-const InputWrapper = styled.div`
-  display: flex;
-  margin-left: 220px;
-  margin-bottom: 20px;
-`;
-
-const Input = styled.input`
-  width: 400px;
-  position: absolute;
-  left: 180px;
-  border: 2px solid #5f4541;
-  height: 50px;
-  border-radius: 15px;
-`;
-
-const Select2 = styled.select`
-  position: absolute;
-  border: 2px solid #5f4541;
-  left: 180px;
-  height: 50px;
-  border-radius: 15px;
-`;
-const Select3 = styled.select`
-  width: 100px;
-  position: absolute;
-  left: 180px;
-  height: 50px;
-  border: 2px solid #5f4541;
-  border-radius: 15px;
-`;
-const Select4 = styled.select`
-  width: 100px;
-  position: absolute;
-  height: 50px;
-  border: 2px solid #5f4541;
-  left: 300px;
-  border-radius: 15px;
-`;
-const Select5 = styled.select`
-  width: 100px;
-  position: absolute;
-  border: 2px solid #5f4541;
-  height: 50px;
-  left: 420px;
-  border-radius: 15px;
-`;
-const Radio1 = styled.div`
-  position: absolute;
-  left: 490px;
-  display: flex;
-  border-radius: 15px;
-  input[type='radio'] {
-    transform: scale(2);
-    margin-right: 10px;
-  }
-`;
-const Radio2 = styled.div`
-  position: absolute;
-  left: 490px;
-  border-radius: 15px;
-  input[type='radio'] {
-    transform: scale(2);
-    margin-right: 10px;
-  }
-`;
-const Radio3 = styled.div`
-  position: absolute;
-  left: 490px;
-  border-radius: 15px;
-  input[type='radio'] {
-    transform: scale(2);
-    margin-right: 10px;
-  }
-`;
-const CheckLabel = styled.label`
-  display: flex;
-  align-items: center;
-  height: 50px;
-  font-size: 24px;
-`;
-
-const Button = styled.button`
-  width: 500px;
-  height: 50px;
-  margin: 150px auto;
-  font-size: 18px;
-  font-weight: bold;
-  border: none;
-  border-radius: 10px;
-  background-color: #5f4541;
-  color: white;
-`;
-const MarginLabel = styled.label`
-  margin-right: 100px;
-`;
-const Label = styled.label`
-  align-items: center;
-  height: 50px;
-  font-size: 24px;
-  position: relative;
-  display: flex;
-
-  &::before {
-    content: '*';
-    color: red;
-    font-size: 24px;
-    position: absolute;
-    top: 0px;
-    right: -12px;
-  }
-  ::placeholder {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 14px;
-  }
-`;
-const PasswordMatchMessage = styled.span<{ match: boolean }>`
-  width: 300px;
-  position: absolute;
-  color: ${(props) => (props.match ? 'green' : 'red')};
-  margin-left: 660px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 14px;
-`;
-const PasswordMessage = styled.span`
-  width: 240px;
-  position: absolute;
-  margin-left: 660px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 14px;
-  color: red;
-`;
 const ThirdArea = () => {
-  const [selectedCity, setSelectedCity] = useState('');
-  const [selectedDistrict, setSelectedDistrict] = useState('');
-  const [selectedNeighborhood, setSelectedNeighborhood] = useState('');
-  const [combinedAddress, setCombinedAddress] = useState('');
-
-  const cities = ['Seoul', 'Busan', 'Incheon'];
-  const districts = ['Gangnam', 'Mapo', 'Jung'];
-  const neighborhoods = ['Apgujeong', 'Itaewon', 'Hongdae'];
-
-  const [formData, setFormData] = useState({
+  const cityDetails = {
+    서울특별시: {
+      노원구: ['중계동', '상계동', '월계동', '하계동'],
+      서초구: ['서초동', '양재동', '잠원동', '반포동'],
+      강남구: ['역삼동', '삼성동', '청담동', '신사동'],
+      도봉구: ['도봉동', '방학동', '쌍문동', '창동'],
+      송파구: ['잠실동', '가락동', '문정동', '방이동'],
+      강서구: ['등촌동', '화곡동', '발산동', '우장산동'],
+    },
+    경기도: {
+      구리시: ['인창동', '토평동', '교문동', '수택동'],
+      수원시: ['장안구', '영통구', '권선구', '팔달구'],
+      성남시: ['수정구', '분당구', '중원구', '수정구'],
+      안양시: ['동안구', '만안구', '동안구', '만안구'],
+      평택시: ['서정동', '비전동', '서탄면', '배양동'],
+      의정부시: ['의정부1동', '의정부2동', '의정부3동', '의정부4동'],
+    },
+    부산광역시: {
+      사하구: ['괴정동', '당리동', '하단동', '장림동'],
+      수영구: ['망미동', '민락동', '남천동', '마린시티'],
+      진구: ['부전동', '전포동', '개금동', '당감동'],
+      동구: ['초량동', '수정동', '좌천동', '범일동'],
+      금정구: ['구서동', '금사동', '부곡동', '청룡동'],
+      해운대구: ['우동', '좌동', '중동', '송정동'],
+    },
+    인천광역시: {
+      부평구: ['부평동', '청천동', '산곡동', '십정동'],
+      남동구: ['간석동', '논현동', '도화동', '구월동'],
+      연수구: ['연수동', '동춘동', '옥련동', '송도동'],
+      미추홀구: ['주안동', '도화동', '구월동', '청라동'],
+      계양구: ['효성동', '작전동', '동양동', '임학동'],
+      서구: ['검단동', '연희동', '마전동', '가좌동'],
+    },
+    울산광역시: {
+      남구: ['삼산동', '신정동', '달동', '무거동'],
+      동구: ['대송동', '서부동', '남목동', '화정동'],
+      북구: ['염포동', '송정동', '양정동', '삼산동'],
+      중구: ['남외동', '북외동', '신암동', '내외동'],
+    },
+    대구광역시: {
+      남구: ['봉덕동', '대명동', '이천동', '수창동'],
+      동구: ['봉무동', '신암동', '방촌동', '수송동'],
+      서구: ['내당동', '비산동', '평리동', '상중이동'],
+      북구: ['칠성동', '태전동', '동호동', '산격동'],
+    },
+    광주광역시: {
+      동구: ['충장로', '용봉동', '서석동', '지산동'],
+      서구: ['양동', '동천동', '치평동', '풍암동'],
+      남구: ['주월동', '방림동', '송하동', '월산동'],
+      북구: ['문흥동', '오룡동', '일곡동', '충효동'],
+    },
+    충청남도: {
+      천안시: ['동남구', '서북구', '백석동', '불당동'],
+      공주시: ['공주시1', '공주시2', '공주시3', '공주시4'],
+      보령시: ['보령시1', '보령시2', '보령시3', '보령시4'],
+      아산시: ['아산시1', '아산시2', '아산시3', '아산시4'],
+    },
+  };
+  const [profile, setProfile] = useState({
     name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    birthYear: '',
-    address: '',
     gender: '',
-    receiveEmail: false,
-    receiveText: false,
+    email: '',
+    emailDomain: '',
+    emailAddress: '',
+    password: '',
+    city: '',
+    district: '',
+    neighborhood: '',
+    birthYear: '',
+    isMail: false,
+    isSms: false,
   });
-
-  const passwordRef = useRef<HTMLInputElement>(null);
-  const [passwordValid, setPasswordValid] = useState(true);
-
-  const handlePasswordValidation = () => {
-    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#]).{8,}$/;
-    const isValid = passwordRegex.test(formData.password);
-    setPasswordValid(isValid);
-    return isValid;
+  const profileData = {
+    name: profile.name,
+    gender: profile.gender,
+    emailAddress: profile.emailAddress,
+    password: profile.password,
+    city: profile.city,
+    district: profile.district,
+    neighborhood: profile.neighborhood,
+    birthYear: profile.birthYear,
+    isMail: profile.isMail,
+    isSms: profile.isSms,
   };
 
-  useEffect(() => {
-    const combinedAddress = `${selectedCity} ${selectedDistrict} ${selectedNeighborhood}`;
-    setCombinedAddress(combinedAddress);
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const [isMatching, setIsMatching] = useState(true);
+  const [isValidPassword, setIsValidPassword] = useState(true);
 
-    setFormData((prevData) => ({
-      ...prevData,
-      address: combinedAddress,
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const genderSelectRef = useRef<HTMLSelectElement>(null);
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const emailDomainSelectRef = useRef<HTMLSelectElement>(null);
+  const passwordInputRef = useRef<HTMLInputElement>(null);
+  const confirmPasswordInputRef = useRef<HTMLInputElement>(null);
+  const birthYearSelectRef = useRef<HTMLSelectElement>(null);
+
+  const citySelectorRef = useRef<HTMLDivElement>(null);
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newEmail = e.target.value;
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      email: newEmail,
+      emailAddress: `${newEmail}@${profile.emailDomain}`,
     }));
-  }, [selectedCity, selectedDistrict, selectedNeighborhood]);
-
-  const [email, setEmail] = useState('');
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { name, value, type } = e.target;
-    const checkedValue =
-      type === 'checkbox' ? (e.target as HTMLInputElement).checked : undefined;
-
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: checkedValue !== undefined ? checkedValue : value,
+  };
+  const handleEmailDomainChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newDomain = e.target.value;
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      emailDomain: newDomain,
+      emailAddress: `${profile.email}@${newDomain}`,
     }));
   };
 
-  const handleEmailChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  ) => {
-    const { value } = e.target;
-    setEmail(value);
-  };
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const isPasswordValid = handlePasswordValidation();
-    if (!isPasswordValid) {
-      if (passwordRef.current) {
-        passwordRef.current.focus();
-      }
+  const handleSubmit = () => {
+    // 필수 입력 필드 확인
+    if (!profile.name) {
+      nameInputRef.current?.focus();
+      return;
+    }
+    if (!profile.gender) {
+      genderSelectRef.current?.focus();
+      return;
+    }
+    if (!profile.email) {
+      emailInputRef.current?.focus();
+      return;
+    }
+    if (!profile.emailDomain) {
+      emailDomainSelectRef.current?.focus();
+      return;
+    }
+    if (!profile.password) {
+      passwordInputRef.current?.focus();
+      return;
+    }
+    if (!confirmPassword) {
+      confirmPasswordInputRef.current?.focus();
       return;
     }
 
-    const formDataObject = {
-      ...formData,
-      email,
-      selectedCity,
-      selectedDistrict,
-      selectedNeighborhood,
-    };
+    // 선택된 지역 정보 확인
+    const { current: citySelector } = citySelectorRef;
+    if (citySelector) {
+      const provinceSelect =
+        citySelector.querySelector<HTMLSelectElement>('select:first-child');
+      const citySelect = citySelector.querySelector<HTMLSelectElement>(
+        'select:nth-child(2)',
+      );
+      const neighborhoodSelect =
+        citySelector.querySelector<HTMLSelectElement>('select:last-child');
 
-    console.log('Form submitted:', formDataObject);
+      if (provinceSelect && provinceSelect.value === '') {
+        provinceSelect.focus();
+        return;
+      }
+      if (citySelect && citySelect.value === '') {
+        citySelect.focus();
+        return;
+      }
+      if (neighborhoodSelect && neighborhoodSelect.value === '') {
+        neighborhoodSelect.focus();
+        return;
+      }
+    } else {
+      // citySelectorRef가 존재하지 않는 경우 처리
+      // 여기에 필요한 동작 추가
+      return;
+    }
+
+    // 생년월일 확인
+    if (!profile.birthYear) {
+      birthYearSelectRef.current?.focus();
+      return;
+    }
+
+    // 비밀번호 일치 및 형식 확인
+    console.log('ProfileData:', profileData);
+    if (!profile.password || !confirmPassword) {
+      setIsMatching(false);
+    } else if (profile.password !== confirmPassword) {
+      setIsMatching(false);
+    } else {
+      const regex =
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+      if (!regex.test(profile.password)) {
+        setIsValidPassword(false);
+        passwordInputRef.current?.focus();
+      } else {
+        setMessage('비밀번호가 확인되었습니다.');
+        setIsMatching(true);
+        setIsValidPassword(true);
+      }
+    }
+
+    // 추가 작업 수행
   };
 
-  const yearOptions = [];
-  for (let year = 2020; year >= 1900; year--) {
-    yearOptions.push(
-      <option key={year} value={year}>
-        {year}년
-      </option>,
-    );
-  }
-  const isFormComplete = (): boolean => {
-    return (
-      formData.name !== '' &&
-      email !== '' &&
-      formData.password !== '' &&
-      formData.confirmPassword !== '' &&
-      formData.birthYear !== '' &&
-      selectedCity !== '' &&
-      selectedDistrict !== '' &&
-      selectedNeighborhood !== ''
-    );
+  const handleProfileIsMailChange = (newValue: SetStateAction<boolean>) => {
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      isMail:
+        typeof newValue === 'function'
+          ? newValue(prevProfile.isMail)
+          : newValue,
+    }));
   };
 
+  const handleSmsChange = (newValue: SetStateAction<boolean>) => {
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      isSms:
+        typeof newValue === 'function' ? newValue(prevProfile.isSms) : newValue,
+    }));
+  };
+  const handleConfirmPasswordChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const value = e.target.value;
+    setConfirmPassword(value);
+  };
+  useEffect(() => {
+    if (confirmPassword !== '' && confirmPassword !== profile.password) {
+      setIsMatching(false);
+    } else {
+      setIsMatching(true);
+    }
+  }, [confirmPassword, profile.password]);
   return (
-    <FormWrapper>
-      <StyledForm onSubmit={handleSubmit}>
-        <InputWrapper>
-          <Label>
-            이름
-            <Input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              style={{ width: '275px' }}
-            />
-          </Label>
-        </InputWrapper>
-        <InputWrapper>
-          <Label>
-            이메일 주소
-            <Input
-              type="text"
-              name="email"
-              value={email}
-              onChange={handleEmailChange}
-              required
-              style={{ width: '300px' }}
-            />
-          </Label>
-        </InputWrapper>
-        <InputWrapper>
-          <Label>
-            비밀번호
-            <Input
-              ref={passwordRef}
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-              placeholder="영문, 숫자, 특수기호(!,@,#) 포함 8글자 이상으로 설정해 주세요."
-            />
-            {!passwordValid && (
-              <PasswordMessage>
-                비밀번호는 영문, 숫자, 특수기호(!,@,#)를 포함하여 8글자
-                이상이어야 합니다.
-              </PasswordMessage>
-            )}
-          </Label>
-        </InputWrapper>
-        <InputWrapper>
-          <Label>
-            비밀번호 확인
-            <Input
-              type="password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-            />
-            {formData.confirmPassword && (
-              <PasswordMatchMessage
-                match={formData.password === formData.confirmPassword}
+    <div>
+      <div style={{ marginLeft: '100px', marginTop: '-32px' }}>
+        <div style={{ display: 'flex', marginBottom: '24px' }}>
+          <p style={{ color: '#EC9D26' }}>* </p>
+          <span style={{ color: '#B3B3B3' }}>
+            {' '}
+            표시는 필수 입력 사항입니다.
+          </span>
+        </div>
+        <div style={{ display: 'flex' }}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              fontSize: '18px',
+            }}
+          >
+            <p
+              style={{
+                height: '41px',
+                fontSize: '18px',
+                paddingTop: '10px',
+                marginBottom: '32px',
+              }}
+            >
+              이름
+            </p>
+            <p
+              style={{
+                height: '41px',
+                paddingTop: '10px',
+                marginBottom: '32px',
+              }}
+            >
+              성별
+            </p>
+            <p
+              style={{
+                height: '41px',
+
+                paddingTop: '10px',
+                marginBottom: '32px',
+              }}
+            >
+              메일주소
+            </p>
+            <p
+              style={{
+                height: '41px',
+                paddingTop: '10px',
+                marginBottom: '40px',
+              }}
+            >
+              비밀번호
+            </p>
+            <p
+              style={{
+                height: '41px',
+                paddingTop: '10px',
+                marginBottom: '40px',
+              }}
+            >
+              비밀번호 확인
+            </p>
+            <p
+              style={{
+                height: '41px',
+                paddingTop: '10px',
+                marginBottom: '40px',
+              }}
+            >
+              주소
+            </p>
+            <p style={{ height: '21px', paddingTop: '10px' }}>출생연도</p>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              marginLeft: '48px',
+              gap: '32px',
+            }}
+          >
+            <div style={{ position: 'relative' }}>
+              <input
+                ref={nameInputRef}
+                type="text"
+                name="name"
+                value={profile.name}
+                onChange={(e) =>
+                  setProfile({ ...profile, name: e.target.value })
+                }
+                required
+                style={{
+                  border: '1px solid #CCCCCC',
+                  borderRadius: '16px',
+                  width: '136px',
+                  height: '41px',
+                  paddingLeft: '20px',
+                  fontSize: '14px',
+                }}
+              />
+              <span
+                style={{
+                  position: 'absolute',
+                  left: '-120px',
+                  top: '10px',
+                  fontSize: '18px',
+                  color: '#EC9D26',
+                }}
               >
-                {formData.password === formData.confirmPassword
-                  ? '일치합니다'
-                  : '일치하지 않습니다'}
-              </PasswordMatchMessage>
-            )}
-          </Label>
-        </InputWrapper>
-        <InputWrapper>
-          <Label>
-            출생 연도
-            <Select2
-              name="birthYear"
-              value={formData.birthYear}
-              onChange={handleChange}
-              required
-            >
-              <option value="">년도 선택</option>
-              {yearOptions}
-            </Select2>
-          </Label>
-        </InputWrapper>
-        <InputWrapper>
-          <Label>
-            주소
-            <Select3
-              name="city"
-              value={selectedCity}
-              onChange={(e) => setSelectedCity(e.target.value)}
-              required
-            >
-              <option value="">시</option>
-              {cities.map((city) => (
-                <option key={city} value={city}>
-                  {city}
-                </option>
-              ))}
-            </Select3>
-            <Select4
-              name="district"
-              value={selectedDistrict}
-              onChange={(e) => setSelectedDistrict(e.target.value)}
-              required
-            >
-              <option value="">구</option>
-              {districts.map((district) => (
-                <option key={district} value={district}>
-                  {district}
-                </option>
-              ))}
-            </Select4>
-            <Select5
-              name="neighborhood"
-              value={selectedNeighborhood}
-              onChange={(e) => setSelectedNeighborhood(e.target.value)}
-              required
-            >
-              <option value="">동</option>
-              {neighborhoods.map((neighborhood) => (
-                <option key={neighborhood} value={neighborhood}>
-                  {neighborhood}
-                </option>
-              ))}
-            </Select5>
-          </Label>
-        </InputWrapper>
-        <InputWrapper>
-          <CheckLabel>
-            성별
-            <Radio1>
-              <input
-                type="radio"
-                id="male"
+                {' '}
+                *
+              </span>
+            </div>
+            <div style={{ position: 'relative' }}>
+              <select
+                ref={genderSelectRef}
+                id="gender"
                 name="gender"
-                value="남성"
-                checked={formData.gender === '남성'}
-                onChange={handleChange}
-              />
-              <MarginLabel htmlFor="male">남성</MarginLabel>
+                value={profile.gender}
+                onChange={(e) =>
+                  setProfile({ ...profile, gender: e.target.value })
+                }
+                required
+                style={{
+                  border: '1px solid #CCCCCC',
+                  borderRadius: '16px',
+                  width: '136px',
+                  height: '41px',
+                  appearance: 'none',
+                  fontSize: '14px',
+                  lineHeight: '16.71px',
+                  paddingTop: 'auto',
+                  paddingLeft: '20px',
+                  backgroundImage: `url('/assets/Survey/graycheck.svg')`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 23px center',
+                }}
+              >
+                <option value="">선택</option>
+                <option value="male">남성</option>
+                <option value="female">여성</option>
+              </select>
+              <span
+                style={{
+                  position: 'absolute',
+                  left: '-120px',
+                  top: '10px',
+                  fontSize: '18px',
+                  color: '#EC9D26',
+                }}
+              >
+                {' '}
+                *
+              </span>
+            </div>
+            <div>
+              <div style={{ position: 'relative' }}>
+                <input
+                  ref={emailInputRef}
+                  id="email"
+                  type="text"
+                  name="email"
+                  value={profile.email}
+                  onChange={handleEmailChange}
+                  required
+                  style={{
+                    width: '206px',
+                    border: '1px solid #CCCCCC',
+                    borderRadius: '16px',
+                    height: '41px',
+                    paddingLeft: '20px',
+                  }}
+                />
+                <span style={{ marginLeft: '16px', marginRight: '16px' }}>
+                  @
+                </span>
+                <select
+                  ref={emailDomainSelectRef}
+                  name="emailDomain"
+                  value={profile.emailDomain}
+                  onChange={handleEmailDomainChange}
+                  required
+                  style={{
+                    border: '1px solid #CCCCCC',
+                    borderRadius: '16px',
+                    width: '160px',
+                    height: '41px',
+                    paddingTop: 'auto',
+                    fontSize: '14px',
+                    paddingLeft: '20px',
+                    appearance: 'none',
+                    backgroundImage: `url('/assets/Survey/graycheck.svg')`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'right 23px center',
+                  }}
+                >
+                  <option value="">선택</option>
+                  <option value="naver.com">naver.com</option>
+                  <option value="hanmail.net">hanmail.net</option>
+                  <option value="nate.com">nate.com</option>
+                  <option value="hotmail.com">hotmail.com</option>
+                  <option value="gmail.com">gmail.com</option>
+                  <option value="yahoo.co.kr">yahoo.co.kr</option>
+                  <option value="yahoo.com">yahoo.com</option>
+                </select>
+                <span
+                  style={{
+                    position: 'absolute',
+                    left: '-85px',
+                    top: '10px',
+                    fontSize: '18px',
+                    color: '#EC9D26',
+                  }}
+                >
+                  {' '}
+                  *
+                </span>
+              </div>
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                position: 'relative',
+              }}
+            >
               <input
-                type="radio"
-                id="female"
-                name="gender"
-                value="여성"
-                checked={formData.gender === '여성'}
-                onChange={handleChange}
+                ref={passwordInputRef}
+                type="password"
+                id="password"
+                name="password"
+                required
+                value={profile.password}
+                onChange={(e) =>
+                  setProfile({ ...profile, password: e.target.value })
+                }
+                placeholder="영문, 숫자, 특수기호 포함 8글자 이상으로 설정해 주세요."
+                style={{
+                  border: '1px solid #CCCCCC',
+                  borderRadius: '16px',
+                  width: '400px',
+                  height: '49px',
+                  fontSize: '12px',
+                  textAlign: 'left',
+                  paddingTop: 'auto',
+                  paddingLeft: '44px',
+                  marginRight: '16px',
+                  backgroundColor: '#F2F2F2',
+                  backgroundImage: `url('/assets/Auth/tabler_lock.svg')`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'left 16px center',
+                }}
               />
-              <label htmlFor="female">여성</label>
-            </Radio1>
-          </CheckLabel>
-        </InputWrapper>
-        <InputWrapper>
-          <CheckLabel>
-            이메일 수신
-            <Radio2>
+              {!isValidPassword && (
+                <p style={{ color: '#E35858' }}>
+                  영문, 숫자, 특수기호를 포함하여 8글자 이상으로 설정해 주세요.
+                </p>
+              )}
+              <span
+                style={{
+                  position: 'absolute',
+                  left: '-85px',
+                  top: '10px',
+                  fontSize: '18px',
+                  color: '#EC9D26',
+                }}
+              >
+                {' '}
+                *
+              </span>
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                position: 'relative',
+              }}
+            >
               <input
-                type="radio"
-                id="emailReceive"
-                name="receiveEmail"
-                checked={formData.receiveEmail}
-                onChange={handleChange}
+                ref={confirmPasswordInputRef}
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                required
+                value={confirmPassword}
+                onChange={handleConfirmPasswordChange}
+                placeholder="비밀번호를 한 번 더 입력해주세요."
+                style={{
+                  border: '1px solid #CCCCCC',
+                  borderRadius: '16px',
+                  width: '400px',
+                  height: '49px',
+                  fontSize: '12px',
+                  textAlign: 'left',
+                  paddingTop: 'auto',
+                  paddingLeft: '44px',
+                  marginRight: '16px',
+                  backgroundColor: '#F2F2F2',
+
+                  backgroundImage: `url('/assets/Auth/tabler_lock.svg')`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'left 16px center',
+                }}
               />
-              <MarginLabel htmlFor="emailReceive">수신</MarginLabel>
-              <input
-                type="radio"
-                id="emailReject"
-                name="receiveEmail"
-                checked={!formData.receiveEmail}
-                onChange={handleChange}
-              />
-              <label htmlFor="emailReject">거부</label>
-            </Radio2>
-          </CheckLabel>
-        </InputWrapper>
-        <InputWrapper>
-          <CheckLabel>
-            문자 수신
-            <Radio3>
-              <input
-                type="radio"
-                id="textReceive"
-                name="receiveText"
-                checked={formData.receiveText}
-                onChange={handleChange}
-              />
-              <MarginLabel htmlFor="textReceive">수신</MarginLabel>
-              <input
-                type="radio"
-                id="textReject"
-                name="receiveText"
-                checked={!formData.receiveText}
-                onChange={handleChange}
-              />
-              <label htmlFor="textReject">거부</label>
-            </Radio3>
-          </CheckLabel>
-        </InputWrapper>
-        <Button type="submit" disabled={!isFormComplete()}>
-          완료
-        </Button>
-      </StyledForm>
-    </FormWrapper>
+              {!isMatching && (
+                <p style={{ color: '#E35858' }}>
+                  비밀번호가 일치하지 않습니다.
+                </p>
+              )}
+              {isMatching && profile.password && confirmPassword && (
+                <p style={{ color: '#17784F' }}>비밀번호가 확인되었습니다.</p>
+              )}
+              <span
+                style={{
+                  position: 'absolute',
+                  left: '-42px',
+                  top: '10px',
+                  fontSize: '18px',
+                  color: '#EC9D26',
+                }}
+              >
+                {' '}
+                *
+              </span>
+            </div>
+            <CitySelector
+              cityDetails={cityDetails}
+              ref={citySelectorRef}
+              onSelect={(
+                city: string,
+                district: string,
+                neighborhood: string,
+              ) => {
+                setProfile({
+                  ...profile,
+                  city,
+                  district,
+                  neighborhood,
+                });
+              }}
+            />
+            <div style={{ display: 'flex', position: 'relative' }}>
+              <select
+                ref={birthYearSelectRef}
+                id="birthYear"
+                name="birthYear"
+                value={profile.birthYear}
+                required
+                onChange={(e) =>
+                  setProfile((prevProfile) => ({
+                    ...prevProfile,
+                    birthYear: e.target.value,
+                  }))
+                }
+                style={{
+                  border: '1px solid #CCCCCC',
+                  borderRadius: '16px',
+                  width: '136px',
+                  height: '49px',
+                  fontSize: '14px',
+
+                  paddingLeft: '20px',
+                  appearance: 'none',
+                  backgroundImage: `url('/assets/Survey/graycheck.svg')`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 23px center',
+                }}
+              >
+                <option value="" disabled>
+                  선택하세요
+                </option>
+                {Array.from({ length: decades }, (_, i) => (
+                  <option
+                    key={startDecade + i * 10}
+                    value={startDecade + i * 10}
+                  >
+                    {startDecade + i * 10}년대
+                  </option>
+                ))}
+              </select>
+              <span
+                style={{
+                  position: 'absolute',
+                  left: '-85px',
+                  top: '10px',
+                  fontSize: '18px',
+                  color: '#EC9D26',
+                }}
+              >
+                {' '}
+                *
+              </span>
+            </div>
+          </div>
+        </div>
+        <p
+          style={{
+            fontSize: '18px',
+            lineHeight: '21.48px',
+
+            marginTop: '56px',
+          }}
+        >
+          프로모션 정보 수신
+        </p>
+        <div
+          className="flex items-center gap-20 mt-6 "
+          style={{ marginBottom: '72px' }}
+        >
+          <section className="flex items-center gap-2">
+            <p
+              className=" font-medium text-[#666666] pr-10"
+              style={{
+                fontSize: '18px',
+              }}
+            >
+              이메일
+            </p>
+            <Toggle isOn={profile.isMail} setIsOn={handleProfileIsMailChange} />
+          </section>
+          <section className="flex items-center gap-2">
+            <p
+              className="font-medium  text-[#666666] pr-10"
+              style={{
+                fontSize: '18px',
+              }}
+            >
+              문자
+            </p>
+            <Toggle isOn={profile.isSms} setIsOn={handleSmsChange} />
+          </section>
+        </div>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <button
+          type="submit"
+          onClick={handleSubmit}
+          style={{
+            width: '437px',
+            height: '51px',
+            backgroundColor: '#EC9D26',
+            padding: '16px, 80px, 16px, 80px',
+            borderRadius: '50px',
+            fontWeight: 'bold',
+            marginBottom: '104px',
+            color: '#FFFFFF',
+            fontSize: '16px',
+            lineHeight: '19.09px',
+          }}
+        >
+          가입 완료!
+        </button>
+      </div>
+    </div>
   );
 };
 export default ThirdArea;
