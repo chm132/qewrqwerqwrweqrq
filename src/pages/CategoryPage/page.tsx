@@ -52,12 +52,17 @@ const CategoryPage = () => {
     pageNo = '1';
   }
 
-  const { data, error } = useGetCategoryLessonsQuery({
-    categoryId,
-    pageNo,
-    keyword: enteredKeyword,
-    orderCriteria: selectedOrderCriteria,
-  });
+  const { data, error } = useGetCategoryLessonsQuery(
+    {
+      categoryId,
+      pageNo,
+      keyword: enteredKeyword,
+      orderCriteria: selectedOrderCriteria,
+    },
+    // {
+    //   refetchOnMountOrArgChange: true,
+    // },
+  );
   // error가 뜬경우 해당 페이지에 대한 데이터가 존재하지 않으면 에러가 남
   // 에러 메시지 꼭 읽어보기
   let content;
@@ -95,7 +100,7 @@ const CategoryPage = () => {
   }
 
   if (freeData.length > 0) {
-    let content = (
+    content = (
       <div className="bg-gray-100">
         <section className="grid grid-cols-4 gap-8 py-12 px-36">
           {freeData.map((lesson, index) => (

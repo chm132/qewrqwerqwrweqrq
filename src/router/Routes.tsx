@@ -22,6 +22,7 @@ import { useSelector } from 'react-redux';
 import LessonPage from '../pages/LessonPage/page';
 import SurveyPage from '../pages/Survey/page';
 import SurveyFloating from '../pages/Survey/SurveyFloating/page';
+import SocialJoinPage from '../pages/Auth/JoinPage/SocialJoin/page';
 
 const Routes = () => {
   const currentUser = useSelector((state: RootState) => state.currentUser.name);
@@ -53,6 +54,7 @@ const Routes = () => {
         <Route path="auth">
           <Route path="join/:stage" element={<JoinPage />} />
           <Route path="login" element={<LoginPage />} />
+          <Route path="socialJoin" element={<SocialJoinPage />} />
         </Route>
 
         {/* 소통하러 올래 라우팅입니다 */}
