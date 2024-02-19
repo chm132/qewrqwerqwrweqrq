@@ -2,8 +2,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({
-    // 빌드용 포드포워딩 명시
-    // baseUrl: 'http://3.38.228.144:8080',
     baseUrl: '',
     prepareHeaders: (headers) => {
       const accessToken = sessionStorage.getItem('accessToken');
