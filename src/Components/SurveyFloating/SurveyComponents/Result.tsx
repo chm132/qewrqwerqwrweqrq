@@ -37,7 +37,7 @@ const FloatingResult = () => {
         </div>
         <div className="grid grid-cols-2 gap-5 md:grid-cols-4">
           {Lessons.map((l: ResultList) => (
-            <div key={l.lessonId} className="w-full mb-0 bg-red-50">
+            <div key={l.lessonId} className="w-full mb-0">
               <LessonCard
                 id={l.lessonId}
                 img={l.imgUrl}
@@ -46,6 +46,7 @@ const FloatingResult = () => {
                 startDate={l.startDate}
                 endTime={l.endTime}
                 startTime={l.startTime}
+                gatherEndDate={l.gatherEndDate}
               />
             </div>
           ))}
@@ -59,9 +60,9 @@ const FloatingResult = () => {
   return (
     <div>
       <TimeLine
-        title="내용"
-        imgSrc={`/assets/TimeLine/mypage.png`}
-        contents="내용"
+        title="딱 맞는 교육 찾기"
+        imgSrc={`/assets/TimeLine/floating.png`}
+        contents="배우고 싶은 마음만 있다면 준비 완료! 올래가 딱 맞는 교육을 찾아 드릴게요."
       />
 
       <div className="w-full h-[716px] bg-[#F2F2F2] flex flex-col justify-center items-center">

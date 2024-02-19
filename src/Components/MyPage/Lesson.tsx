@@ -3,6 +3,7 @@ import { formatTime } from '../../utils/dayjs';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import { useDeleteLessonMutation } from '../../redux/apis/guestApi';
+import { useDeleteApplyMutation } from '../../redux/apis/lessonApi';
 
 interface LessonProps {
   id?: number;
@@ -39,6 +40,11 @@ const Lesson = ({
   );
   // 현재 마이페이지 들어와있는 비회원의 전화번호
   const phoneNum = useSelector((state: RootState) => state.nonUser.phoneNum);
+
+  // 회원의 수강신청 취소
+  const [deleteApply] = useDeleteApplyMutation();
+
+  // 비회원의 수강신청 취소
   const [deleteLesson] = useDeleteLessonMutation();
   const navigate = useNavigate();
 
@@ -48,6 +54,10 @@ const Lesson = ({
         return 'smartPhone';
       case '키오스크':
         return 'kiosk';
+      case '컴퓨터':
+        return 'computer';
+      case '부동산':
+        return 'estate';
 
       default:
         return category;
@@ -57,6 +67,7 @@ const Lesson = ({
   const deleteLessonHandler = () => {
     if (currentUser) {
       // 로그인한 회원 수업 취소 로직
+      deleteApply(id);
     } else {
       deleteLesson({
         phoneNum,
@@ -66,7 +77,7 @@ const Lesson = ({
   };
 
   return (
-    <div className="relative">
+    <div className="relative w-2/3">
       <div className="flex items-center gap-4">
         <section className="flex items-center justify-center w-16 h-16 rounded-full bg-primary01">
           <img
@@ -106,8 +117,8 @@ const Lesson = ({
       <div className="flex items-start w-full h-40 mt-5 bg-white shadow-lg cursor-pointer rounded-3xl">
         <img
           src={imgUrl}
-          alt=""
-          className="h-40 w-52 rounded-l-3xl"
+          alt="dasd"
+          className="object-cover h-40 w-52 rounded-l-3xl"
           onClick={() => navigate(`/lesson?lessonId=${id}`)}
         />
         <section className="flex flex-col w-full gap-2 px-6 py-5">

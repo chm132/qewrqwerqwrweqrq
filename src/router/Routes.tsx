@@ -22,6 +22,7 @@ import { useSelector } from 'react-redux';
 import LessonPage from '../pages/LessonPage/page';
 import SurveyPage from '../pages/Survey/page';
 import SurveyFloating from '../pages/Survey/SurveyFloating/page';
+import LessonResult from '../pages/CategoryPage/LessonResult';
 
 const Routes = () => {
   const currentUser = useSelector((state: RootState) => state.currentUser.name);
@@ -41,6 +42,7 @@ const Routes = () => {
         <Route index element={<HomePage />} />
         <Route path=":category/:categoryId" element={<CategoryPage />} />
         <Route path="lesson" element={<LessonPage />} />
+        <Route path="lessonResult" element={<LessonResult />} />
         <Route path=":category/:categoryId/survey" element={<SurveyPage />} />
         <Route
           path=":category/:categoryId/survey/result"

@@ -428,6 +428,7 @@ const ModifyUser = ({ setShowModify, setPart }: ModifyUserProps) => {
               <option value="gmail.com">gmail.com</option>
               <option value="yahoo.co.kr">yahoo.co.kr</option>
               <option value="yahoo.com">yahoo.com</option>
+              <option value="ole.com">ole.com</option>
             </select>
           </div>
           <div style={{ display: 'flex' }}>

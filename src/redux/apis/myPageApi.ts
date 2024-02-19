@@ -38,7 +38,7 @@ export const myPageApi = apiSlice.injectEndpoints({
 
     // 회원의 수업 수강 내역 조회
     getUserCompletedLessons: builder.query<MyPageLessonResponse, void>({
-      // providesTags: ['Lesson'],
+      providesTags: ['Lesson'],
       query: () => {
         return {
           url: '/member/lessons/completed',

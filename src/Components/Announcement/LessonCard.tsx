@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { formatTime } from '../../utils/dayjs';
+import { formatTime, fromNow } from '../../utils/dayjs';
+import { getHour } from '../../utils/getHour';
 
 interface LessonCardProps {
   id: number;
@@ -9,6 +10,7 @@ interface LessonCardProps {
   startDate: string;
   endTime: string;
   startTime: string;
+  gatherEndDate: string;
 }
 
 const LessonCard = ({
@@ -19,6 +21,7 @@ const LessonCard = ({
   startDate,
   endTime,
   startTime,
+  gatherEndDate,
 }: LessonCardProps) => {
   const navigate = useNavigate();
   return (
@@ -37,14 +40,15 @@ const LessonCard = ({
           {formatTime(startDate, 'YYYY.MM.DD (ddd)')} ~{' '}
           {formatTime(endDate, 'MM.DD (ddd)')}
         </p>
-        {/* 얜 걍 하드코딩해야겠다 */}
         <p className="text-sm font-medium text-[#666666]">
-          10:00 ~ 12:00 (2시간)
-          {/* {formatTime(startTime, 'hh:mm') + '~' + formatTime(endTime, 'hh:mm')} */}
+          {formatTime(startTime, 'HH:mm') + '~' + formatTime(endTime, 'HH:mm')}{' '}
+          ({getHour(endTime) - getHour(startTime)}시간)
         </p>
       </section>
       <span className="absolute right-0 flex items-center justify-center w-16 h-8 rounded-tl-lg top-56 bg-primary01">
-        <p className="text-sm font-semibold text-white">4일 남음</p>
+        <p className="text-sm font-semibold text-white">
+          {fromNow(gatherEndDate)}일 남음
+        </p>
       </span>
     </div>
   );

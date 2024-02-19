@@ -20,9 +20,9 @@ const SurveyFloating = () => {
   return (
     <div>
       <TimeLine
-        title="내용"
-        imgSrc={`/assets/TimeLine/mypage.svg`}
-        contents="내용"
+        title="딱 맞는 교육 찾기"
+        imgSrc={`/assets/TimeLine/floating.png`}
+        contents="배우고 싶은 마음만 있다면 준비 완료! 올래가 딱 맞는 교육을 찾아 드릴게요."
       />
       <div className="w-full h-[627px] bg-[#E6E6E6]">
         <FloatingProgressBar step={pageNo} />

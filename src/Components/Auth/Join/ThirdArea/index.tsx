@@ -1,15 +1,15 @@
 import { useState, useEffect, useRef } from 'react';
 import { Toggle } from './Toggle';
-import React, { Dispatch, SetStateAction } from 'react';
-import CitySelector from './citySelector';
+import React, { SetStateAction } from 'react';
 import { useJoin } from '../../../../hooks/Auth/useJoin';
+import TermsOfServiceModal from '../../../AlertModal/SignupModal/RequiredFieldsModal';
 
 const currentYear = new Date().getFullYear();
 const startDecade = 1900;
 const decades = Math.ceil((currentYear - startDecade + 1) / 10);
 
 const ThirdArea = () => {
-  const cityDetails = {
+  const addressData: { [key: string]: { [key: string]: string[] } } = {
     서울특별시: {
       노원구: ['중계동', '상계동', '월계동', '하계동'],
       서초구: ['서초동', '양재동', '잠원동', '반포동'],
@@ -67,8 +67,15 @@ const ThirdArea = () => {
       아산시: ['아산시1', '아산시2', '아산시3', '아산시4'],
     },
   };
+  const [showModal, setShowModal] = useState(false);
 
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
   const { signUp } = useJoin();
+  const [selectedCity, setSelectedCity] = useState('');
+  const [selectedDistrict, setSelectedDistrict] = useState('');
+  const [selectedNeighborhood, setSelectedNeighborhood] = useState('');
 
   const [profile, setProfile] = useState({
     name: '',
@@ -110,7 +117,10 @@ const ThirdArea = () => {
   const confirmPasswordInputRef = useRef<HTMLInputElement>(null);
   const birthYearSelectRef = useRef<HTMLSelectElement>(null);
 
-  const citySelectorRef = useRef<HTMLDivElement>(null);
+  const citySelectRef = useRef<HTMLSelectElement>(null);
+  const districtSelectRef = useRef<HTMLSelectElement>(null);
+  const neighborhoodSelectRef = useRef<HTMLSelectElement>(null);
+
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newEmail = e.target.value;
     setProfile((prevProfile) => ({
@@ -132,61 +142,53 @@ const ThirdArea = () => {
     // 필수 입력 필드 확인
     if (!profile.name) {
       nameInputRef.current?.focus();
+      setShowModal(true);
       return;
     }
     if (!profile.gender) {
       genderSelectRef.current?.focus();
+      setShowModal(true);
       return;
     }
     if (!profile.email) {
       emailInputRef.current?.focus();
+      setShowModal(true);
       return;
     }
     if (!profile.emailDomain) {
       emailDomainSelectRef.current?.focus();
+      setShowModal(true);
       return;
     }
     if (!profile.password) {
       passwordInputRef.current?.focus();
+      setShowModal(true);
       return;
     }
     if (!confirmPassword) {
       confirmPasswordInputRef.current?.focus();
+      setShowModal(true);
+      return;
+    }
+    if (!profile.city) {
+      citySelectRef.current?.focus();
+      setShowModal(true);
+      return;
+    }
+    if (!profile.district) {
+      districtSelectRef.current?.focus();
+      setShowModal(true);
+      return;
+    }
+    if (!profile.neighborhood) {
+      neighborhoodSelectRef.current?.focus();
+      setShowModal(true);
       return;
     }
 
-    // 선택된 지역 정보 확인
-    const { current: citySelector } = citySelectorRef;
-    if (citySelector) {
-      const provinceSelect =
-        citySelector.querySelector<HTMLSelectElement>('select:first-child');
-      const citySelect = citySelector.querySelector<HTMLSelectElement>(
-        'select:nth-child(2)',
-      );
-      const neighborhoodSelect =
-        citySelector.querySelector<HTMLSelectElement>('select:last-child');
-
-      if (provinceSelect && provinceSelect.value === '') {
-        provinceSelect.focus();
-        return;
-      }
-      if (citySelect && citySelect.value === '') {
-        citySelect.focus();
-        return;
-      }
-      if (neighborhoodSelect && neighborhoodSelect.value === '') {
-        neighborhoodSelect.focus();
-        return;
-      }
-    } else {
-      // citySelectorRef가 존재하지 않는 경우 처리
-      // 여기에 필요한 동작 추가
-      return;
-    }
-
-    // 생년월일 확인
     if (!profile.birthYear) {
       birthYearSelectRef.current?.focus();
+      setShowModal(true);
       return;
     }
     if (!profile.password || !confirmPassword) {
@@ -205,8 +207,8 @@ const ThirdArea = () => {
         setIsValidPassword(true);
       }
     }
+
     signUp(profileData);
-    // 추가 작업 수행
   };
 
   const handleProfileIsMailChange = (newValue: SetStateAction<boolean>) => {
@@ -239,9 +241,53 @@ const ThirdArea = () => {
       setIsMatching(true);
     }
   }, [confirmPassword, profile.password]);
+  const handleCityChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const city = event.target.value;
+    setSelectedCity(city);
+
+    setSelectedDistrict('');
+    setSelectedNeighborhood('');
+
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      city: city,
+      district: '',
+      neighborhood: '',
+    }));
+  };
+
+  const handleDistrictChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const district = event.target.value;
+    setSelectedDistrict(district);
+    // Reset neighborhood when district changes
+    setSelectedNeighborhood('');
+
+    // Update profile state
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      district: district,
+      neighborhood: '',
+    }));
+  };
+
+  const handleNeighborhoodChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const neighborhood = event.target.value;
+    setSelectedNeighborhood(neighborhood);
+
+    setProfile((prevProfile) => ({
+      ...prevProfile,
+      neighborhood: neighborhood,
+    }));
+  };
+
   return (
     <div>
-      <div style={{ marginLeft: '100px', marginTop: '-32px' }}>
+      {showModal && <TermsOfServiceModal onClose={handleCloseModal} />}
+      <div style={{ marginLeft: '170px', marginTop: '-32px' }}>
         <div style={{ display: 'flex', marginBottom: '24px' }}>
           <p style={{ color: '#EC9D26' }}>* </p>
           <span style={{ color: '#B3B3B3' }}>
@@ -567,22 +613,126 @@ const ThirdArea = () => {
                 *
               </span>
             </div>
-            <CitySelector
-              cityDetails={cityDetails}
-              ref={citySelectorRef}
-              onSelect={(
-                city: string,
-                district: string,
-                neighborhood: string,
-              ) => {
-                setProfile({
-                  ...profile,
-                  city,
-                  district,
-                  neighborhood,
-                });
-              }}
-            />
+            <div style={{ display: 'flex', position: 'relative' }}>
+              <select
+                ref={citySelectRef}
+                id="city"
+                name="city"
+                value={selectedCity}
+                required
+                onChange={handleCityChange}
+                style={{
+                  border: '1px solid #CCCCCC',
+                  borderRadius: '16px',
+                  width: '208px',
+                  height: '49px',
+                  fontSize: '14px',
+                  marginRight: '24px',
+                  paddingTop: 'auto',
+                  paddingLeft: '20px',
+                  appearance: 'none',
+                  backgroundImage: `url('/assets/Survey/graycheck.svg')`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 23px center',
+                }}
+              >
+                <option
+                  style={{
+                    fontSize: '14px',
+                    textAlign: 'left',
+                    lineHeight: '16.71px',
+
+                    paddingLeft: '20px',
+                  }}
+                >
+                  시/도
+                </option>
+                {Object.keys(addressData).map((city) => (
+                  <option key={city} value={city}>
+                    {city}
+                  </option>
+                ))}
+              </select>
+              <select
+                ref={districtSelectRef}
+                name="district"
+                id="district"
+                required
+                value={selectedDistrict}
+                onChange={handleDistrictChange}
+                style={{
+                  border: '1px solid #CCCCCC',
+                  borderRadius: '16px',
+                  width: '208px',
+                  height: '49px',
+                  marginRight: '24px',
+                  paddingTop: 'auto',
+                  paddingLeft: '20px',
+                  fontSize: '14px',
+
+                  appearance: 'none',
+                  backgroundImage: `url('/assets/Survey/graycheck.svg')`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 23px center',
+                }}
+              >
+                <option value="" disabled>
+                  시/군/구
+                </option>
+                {selectedCity &&
+                  Object.keys(addressData[selectedCity]).map((district) => (
+                    <option key={district} value={district}>
+                      {district}
+                    </option>
+                  ))}
+              </select>
+              <select
+                ref={neighborhoodSelectRef}
+                name="neighborhood"
+                id="neighborhood"
+                required
+                value={selectedNeighborhood}
+                onChange={handleNeighborhoodChange}
+                style={{
+                  border: '1px solid #CCCCCC',
+                  borderRadius: '16px',
+                  width: '208px',
+                  height: '49px',
+                  appearance: 'none',
+                  paddingTop: 'auto',
+                  paddingLeft: '20px',
+                  fontSize: '14px',
+
+                  backgroundImage: `url('/assets/Survey/graycheck.svg')`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 23px center',
+                }}
+              >
+                <option value="" disabled>
+                  읍/면/동
+                </option>
+                {selectedDistrict &&
+                  addressData[selectedCity][selectedDistrict].map(
+                    (neighborhood) => (
+                      <option key={neighborhood} value={neighborhood}>
+                        {neighborhood}
+                      </option>
+                    ),
+                  )}
+              </select>
+              <span
+                style={{
+                  position: 'absolute',
+                  left: '-120px',
+                  top: '10px',
+                  fontSize: '18px',
+                  color: '#EC9D26',
+                }}
+              >
+                {' '}
+                *
+              </span>
+            </div>
             <div style={{ display: 'flex', position: 'relative' }}>
               <select
                 ref={birthYearSelectRef}
@@ -611,7 +761,7 @@ const ThirdArea = () => {
                 }}
               >
                 <option value="" disabled>
-                  선택하세요
+                  선택
                 </option>
                 {Array.from({ length: decades }, (_, i) => (
                   <option

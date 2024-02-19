@@ -1,14 +1,29 @@
 import { useState } from 'react';
 import Input1 from './../Input/Input1';
-import { transValue } from '../../../utils/transValue';
 import { useDispatch } from 'react-redux';
 import { setSurveyOne } from '../../../redux/slices/surveySlice';
+import { useParams } from 'react-router-dom';
 
 interface Survey2Props {
   onNextButtonClick: (nextStep: number) => void;
 }
 
 function Survey2({ onNextButtonClick }: Survey2Props) {
+  const categoryName = useParams()?.category || '스마트폰';
+
+  console.log(categoryName);
+  let questions: string[] = [];
+
+  if (categoryName === '부동산') {
+    questions = ['부동산/임대차', '재테크/재무관리', '공인중개사 준비'];
+  } else {
+    questions = [
+      '기본 설정(앱 설치, 환경설정 등)',
+      '기본 활용(카메라, 갤러리 등)',
+      '실생활 활용(카카오톡, 모바일 주문, 배달 앱 등)',
+    ];
+  }
+
   const dispatch = useDispatch();
   const [isCheckedFirst, setIsCheckedFirst] = useState([false, false, false]);
   const [isCheckedSecond, setIsCheckedSecond] = useState([false, false]);
@@ -31,7 +46,15 @@ function Survey2({ onNextButtonClick }: Survey2Props) {
 
   dispatch(
     setSurveyOne({
-      sub_categoryIds: transValue(isCheckedFirst),
+      sub_categoryIds: isCheckedFirst
+        .map((value, index) => {
+          if (categoryName === '부동산') {
+            return value ? index + 9 : null;
+          } else {
+            return value ? index + 1 : null;
+          }
+        })
+        .filter((value): value is number => value !== null),
       classType: isCheckedSecond
         .map((value, index) => (value ? index + 1 : null))
         .filter((value): value is number => value !== null),
@@ -52,17 +75,17 @@ function Survey2({ onNextButtonClick }: Survey2Props) {
           </div>
           <div className="mt-6 click">
             <Input1
-              question="기본 설정(앱 설치, 환경설정 등)"
+              question={questions[0]}
               isChecked={isCheckedFirst[0]}
               onChange={(isChecked) => handleChangeFirst(0, isChecked)}
             />
             <Input1
-              question="기본 활용(카메라, 갤러리 등)"
+              question={questions[1]}
               isChecked={isCheckedFirst[1]}
               onChange={(isChecked) => handleChangeFirst(1, isChecked)}
             />
             <Input1
-              question="실생활 활용(카카오톡, 모바일 주문, 배달 앱 등)"
+              question={questions[2]}
               isChecked={isCheckedFirst[2]}
               onChange={(isChecked) => handleChangeFirst(2, isChecked)}
             />

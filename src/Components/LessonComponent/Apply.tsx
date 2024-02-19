@@ -54,17 +54,13 @@ export default function Apply({
     if (currentUser) {
       // 회원일떄
       if (applyStatus) {
-        // 수업 신청 취소 모달 띄우기 -> clear
         setShowCancel(true);
       } else {
         // 수업 신청하기
         postApply(lessonId);
-        // 신청 한 후 모달이 떠야함
         setShowConfirm(true);
       }
     } else {
-      // 비회원일때 신청 시도
-      // 로그인 유도 모달 출현
       setShowLogin(true);
     }
   };
@@ -130,36 +126,50 @@ export default function Apply({
         className={`
           ${
             applyStatus
-              ? 'bg-[#FFFFFF] text-primary01'
-              : 'bg-primary01 text-[#FFFFFF]'
+              ? 'bg-primary01 flex items-center justify-center gap-2'
+              : 'bg-[#FFFFFF] border-2 border-primary01'
           }
-          w-[306px] h-[51px] rounded-[50px] ml-8 mt-8 mb-4 font-semibold  
+          w-[306px] h-[51px] rounded-[50px] ml-8 mt-8 mb-4 font-semibold cursor-pointer hover:opacity-80 transition-all 
         `}
         onClick={applyHandler}
       >
-        {applyStatus ? '신청 완료' : '신청하기'}
+        {applyStatus && <img src="/assets/Lesson/check.svg" alt="check" />}
+        <p className={`${applyStatus ? 'text-[#FFFFFF]' : 'text-primary01'}`}>
+          {applyStatus ? '신청 완료' : '신청하기'}
+        </p>
       </button>
       <button
         className={`
-          ${likeStatus ? 'border-primary01 text-primary01' : 'text-[#666666]'}
-          w-[306px] h-[51px] rounded-[50px] ml-8 mb-[62px] bg-[#FFFFFF] font-semibold border-[2px]
+          ${
+            likeStatus
+              ? 'border-primary01 flex items-center justify-center gap-2'
+              : 'bg-[#FFFFFF] '
+          }
+          w-[306px] h-[51px] rounded-[50px] ml-8 mb-[62px] bg-[#FFFFFF] border-[2px] cursor-pointer hover:opacity-80 transition-all 
         `}
         onClick={likeHandler}
       >
-        {likeStatus ? '찜 완료' : '찜하기'}
+        {likeStatus && <img src="/assets/Lesson/heart.svg" alt="heart" />}
+        <p
+          className={`${
+            likeStatus ? 'text-primary01 ' : 'text-[#666666]'
+          } font-semibold `}
+        >
+          {likeStatus ? '찜 완료' : '찜하기'}
+        </p>
       </button>
       <div className=" w-[322px] border-[1px] rounded-3xl m-auto mb-8"></div>
-      <button className="flex items-center w-[306px] h-[51px] rounded-[50px] ml-8 mb-[17px] bg-[#FFEB00] font-semibold text-[#3C1E1E]">
+      <button className="flex items-center w-[306px] h-[51px] rounded-[50px] ml-8 mb-[17px] bg-[#FFEB00] font-semibold text-[#3C1E1E] cursor-pointer hover:opacity-80 transition-all ">
         <img
-          src="/assets/Leasson/kakao.svg"
+          src="/assets/Lesson/kakao.svg"
           alt="kakao"
           className=" ml-[55px] mr-2"
         />
         카카오톡으로 공유하기
       </button>
-      <button className="flex items-center w-[306px] h-[51px] rounded-[50px] ml-8 mb-[62px] bg-[#25CA33] font-semibold text-[#FFFFFF]">
+      <button className="flex items-center w-[306px] h-[51px] rounded-[50px] ml-8 mb-[62px] bg-[#25CA33] font-semibold text-[#FFFFFF] cursor-pointer hover:opacity-80 transition-all ">
         <img
-          src="/assets/Leasson/band.svg"
+          src="/assets/Lesson/band.svg"
           alt="kakao"
           className=" ml-[85px] mr-2"
         />

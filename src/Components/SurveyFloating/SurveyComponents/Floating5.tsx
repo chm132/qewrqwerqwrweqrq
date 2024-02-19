@@ -53,7 +53,7 @@ function Floating5() {
         <div className="box1 m-14">
           <div className="flex question">
             <p className=" text-[18px] font-semibold">
-              5. 선호하는 선생님의 성별을 선택해주세요.
+              4. 선호하는 선생님의 성별을 선택해주세요.
             </p>
           </div>
           <div className="mt-6 click">
@@ -77,7 +77,7 @@ function Floating5() {
         <div className="box1 m-14">
           <div className="flex question">
             <p className=" text-[18px] font-semibold">
-              6. 선호하는 선생님의 나이대를 선택해주세요.
+              5. 선호하는 선생님의 나이대를 선택해주세요.
             </p>
             <p className=" ml-[16px] mt-[6px] text-[14px] text-[#999999]">
               복수 응답 가능

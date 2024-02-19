@@ -43,7 +43,7 @@ function Floating7() {
         <div className="box1 m-14">
           <div className="flex question">
             <p className="text-[18px] font-semibold">
-              8. 고객님의 성별을 알려주세요.
+              7. 고객님의 성별을 알려주세요.
             </p>
           </div>
           <div className="mt-6 click">
@@ -60,7 +60,7 @@ function Floating7() {
         <div className="box1 m-14">
           <div className="flex question">
             <p className="text-[18px] font-semibold">
-              9. 고객님의 나이대를 알려주세요.
+              8. 고객님의 나이대를 알려주세요.
             </p>
           </div>
           <div className="flex gap-8 mt-6 click">

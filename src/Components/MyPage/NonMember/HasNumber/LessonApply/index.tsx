@@ -45,7 +45,9 @@ export const Lessons = [
 const LessonApply = () => {
   const phoneNum = useSelector((state: RootState) => state.nonUser.phoneNum);
 
-  const { isLoading, data, error } = useGetLessonsQuery(phoneNum);
+  const { isLoading, data, error } = useGetLessonsQuery(phoneNum, {
+    refetchOnMountOrArgChange: true,
+  });
 
   let content;
 

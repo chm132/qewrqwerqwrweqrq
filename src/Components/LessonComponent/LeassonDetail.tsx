@@ -1,4 +1,5 @@
 import { formatTime } from '../../utils/dayjs';
+import { transEnCategoryId } from '../../utils/transKrCategoryId';
 import LeassonInput from './Input';
 import LeassonInput2 from './Input2';
 
@@ -8,6 +9,8 @@ interface LessonDetailProps {
   categoryId: number;
   gatherStartDate: string;
   gatherEndDate: string;
+  lessonStartTime: string;
+  lessonEndTime: string;
   teacher: string;
   limitCount: number;
   lessonType: string;
@@ -21,6 +24,8 @@ function LeassonDetail({
   categoryId,
   gatherStartDate,
   gatherEndDate,
+  lessonStartTime,
+  lessonEndTime,
   teacher,
   limitCount,
   lessonType,
@@ -37,60 +42,60 @@ function LeassonDetail({
         <div className="flex w-full gap-4 2">
           <div className="flex items-center justify-center w-16 h-16 rounded-full shadow-md 3 bg-primary01 bg-opacity-85">
             <img
-              src="/assets/Survey/categoryimg.svg"
+              src={`/assets/Category/${transEnCategoryId(categoryId)}.svg`}
               alt="임시 카테고리 이미지"
             />
           </div>
           <div className="4 w-[443px] h-full text-[18px] leading-[27px] font-normal ">
-            1.{description}
+            {description}
           </div>
         </div>
         <div className="mt-10 5 ">
           <LeassonInput
-            iconSrc="/assets/Leasson/date.svg"
+            iconSrc="/assets/Lesson/date.svg"
             label="일 &nbsp;시"
             value={
               formatTime(gatherStartDate, 'YYYY.MM.DD (ddd)') +
               ' ~ ' +
               formatTime(gatherEndDate, 'MM.DD(ddd)') +
               ' ' +
-              formatTime(gatherStartDate, 'hh:mm') +
+              formatTime(lessonStartTime, 'HH:mm') +
               '~' +
-              formatTime(gatherEndDate, 'hh:mm')
+              formatTime(lessonEndTime, 'HH:mm')
             }
           />
           <LeassonInput
-            iconSrc="/assets/Leasson/teacher.svg"
+            iconSrc="/assets/Lesson/teacher.svg"
             label="강 &nbsp;사"
             value={teacher}
           />
           <LeassonInput
-            iconSrc="/assets/Leasson/personnel.svg"
+            iconSrc="/assets/Lesson/personnel.svg"
             label="인 &nbsp;원"
             value={String(limitCount)}
           />
           <LeassonInput2
-            iconSrc="/assets/Leasson/book.svg"
+            iconSrc="/assets/Lesson/book.svg"
             label="학습방법"
             value={lessonType === 'OFFLINE' ? '오프라인' : '온라인'}
           />
           <LeassonInput
-            iconSrc="/assets/Leasson/pay.svg"
+            iconSrc="/assets/Lesson/pay.svg"
             label="수 강 료"
             value={price === 0 ? '무료' : price.toLocaleString() + '원'}
           />
           <LeassonInput2
-            iconSrc="/assets/Leasson/stuff.svg"
+            iconSrc="/assets/Lesson/stuff.svg"
             label="준 비 물"
             value={supplies}
           />
         </div>
       </div>
       <img
-        src="/assets/Leasson/Announcement.svg"
+        src="/assets/Lesson/Announcement.svg"
         alt="공고샘플 승인 대기 여부"
       />
-      <img src="/assets/Leasson/Announcement2.svg" alt="공고샘플 수강료" />
+      <img src="/assets/Lesson/Announcement2.svg" alt="공고샘플 수강료" />
     </div>
   );
 }

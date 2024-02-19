@@ -42,6 +42,7 @@ const SurveyResult = () => {
               startDate={l.startDate}
               endTime={l.endTime}
               startTime={l.startTime}
+              gatherEndDate={l.gatherEndDate}
             />
           </div>
         ))}

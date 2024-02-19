@@ -24,7 +24,7 @@ const CancelModal = ({ controlModal, lessonId, like }: CancelModalProps) => {
 
   return (
     <div className="top-[40%] left-[30%] flex-col gap-4 px-32 pt-16 absolute z-40 flex bg-white h-52 w-[640px] rounded-3xl">
-      <p className="text-[#333333] font-semibold text-2xl">
+      <p className="text-[#333333] font-semibold text-2xl text-center">
         {like
           ? '수업 찜하기를 취소하시겠습니까?'
           : '수업 신청을 취소하시겠습니까?'}

@@ -23,6 +23,7 @@ const LessonApply = () => {
           <Lesson
             key={index}
             id={lesson.lessonId}
+            imgUrl={lesson.imgUrl}
             category={lesson.categoryName}
             status={lesson.applicationStatus}
             createdAt={lesson.createdAt}
@@ -39,7 +40,7 @@ const LessonApply = () => {
     );
   }
   return (
-    <div className="flex flex-col items-center gap-10 px-32 py-10">
+    <div className="flex flex-col items-center justify-center gap-10 px-32 py-10">
       {content}
     </div>
   );

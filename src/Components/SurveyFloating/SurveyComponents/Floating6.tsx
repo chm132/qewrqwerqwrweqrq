@@ -41,7 +41,7 @@ function Floating6() {
         <div className="m-14">
           <div className="flex question">
             <p className=" text-[18px] font-semibold">
-              7. 수업이 가능한 시간대는 언젠가요?
+              6. 수업이 가능한 시간대는 언젠가요?
             </p>
             <p className=" ml-[16px] mt-[6px] text-[14px] text-[#999999]">
               복수 응답 가능

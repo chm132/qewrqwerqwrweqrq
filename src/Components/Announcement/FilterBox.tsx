@@ -4,51 +4,63 @@ import { GoSearch } from 'react-icons/go';
 import { MdKeyboardArrowRight } from 'react-icons/md';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useGetFreeLessonsQuery } from '../../redux/apis/lessonApi';
-import { LessonList } from '../../types/Response/Category/CategoryLessonsType';
+import { transKrCategoryId } from '../../utils/transKrCategoryId';
+import { ResultList } from '../../types/Response/Survey/SurveyLessonType';
 
 interface FilterBoxProps {
   fix: boolean;
   categoryId: number;
   setKeyword: React.Dispatch<React.SetStateAction<string>>;
-  setFreeData: React.Dispatch<React.SetStateAction<LessonList[]>>;
   selectedOrderCriteria: string;
   setSelectedOrderCriteria: React.Dispatch<React.SetStateAction<string>>;
+  freeClick: boolean;
+  setFreeClick: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const FilterBox = ({
   fix,
   categoryId,
   setKeyword,
-  setFreeData,
   selectedOrderCriteria,
   setSelectedOrderCriteria,
+  freeClick,
+  setFreeClick,
 }: FilterBoxProps) => {
   let pageNo = new URLSearchParams(useLocation().search).get('pageNo');
 
   if (!pageNo) {
     pageNo = '1';
   }
-
-  const { data } = useGetFreeLessonsQuery({ categoryId, pageNo });
-  console.log(data);
-
-  // 아래 주석부분 현재 인증관련 오류로 잠시 해놓은것이니 지우지 마세요
+  // isClicked는 드롭다운 왔다갔다
+  const [isClicked, setIsClicked] = useState(false);
+  // const [selectedLessons, setSelectedLessons] = useState<ResultList[]>([]);
+  const navigate = useNavigate();
 
   const token = sessionStorage.getItem('accessToken');
 
   const fetchData = async () => {
-    const response = await axios.get(`/lessons/${categoryId}/surveys`, {
-      headers: {
-        Authorization: `Bearer ${token}`, // 토큰을 헤더에 추가
-      },
-    });
-    console.log(response);
+    try {
+      const response = await axios.get(`/lessons/${categoryId}/surveys`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // 데이터를 처리하는 로직
+      if (response.data.result.length > 0) {
+        navigate('/lessonResult', {
+          state: response.data.result,
+        });
+      }
+    } catch (error) {
+      // 에러 처리 및 navigate
+      navigateWithErrorHandling(error);
+    }
   };
-
-  // isClicked는 드롭다운 왔다갔다
-  const [isClicked, setIsClicked] = useState(false);
-  const navigate = useNavigate();
+  const navigateWithErrorHandling = (error: any) => {
+    // 에러를 기반으로 적절한 navigate 동작 수행
+    // 설문조사하기로 이동
+    navigate('survey');
+  };
 
   const searchHandler = () => {
     if (token) {
@@ -73,9 +85,7 @@ const FilterBox = ({
   };
 
   const searchFree = () => {
-    if (data) {
-      setFreeData(data.result.lessonPreviewDTOList);
-    }
+    setFreeClick(!freeClick);
   };
 
   return (
@@ -85,7 +95,7 @@ const FilterBox = ({
       flex items-center justify-between w-full h-20 text-center px-36 `}
     >
       <ul className="grid grid-cols-3 font-medium">
-        <div className="relative font-medium">
+        <div className="relative flex items-center font-medium text-center">
           <section
             className="flex items-center justify-center w-40 gap-1 text-gray-500 cursor-pointer"
             onClick={() => setIsClicked(!isClicked)}
@@ -104,28 +114,35 @@ const FilterBox = ({
             )}
           </section>
           <section
-            className={`z-20 absolute flex flex-col w-full gap-4 py-4 bg-white right-3 top-10 rounded-b-[16px] ${
+            className={`z-20 absolute flex flex-col w-full gap-4 py-4 bg-white right-3 top-16 rounded-b-[16px] ${
               !isClicked && 'hidden'
             }`}
           >
-            <p
-              className="cursor-pointer hover:font-semibold hover:text-primary01"
-              onClick={createdAtHandler}
-            >
-              최신순
-            </p>
-            <p
-              className="z-20 cursor-pointer hover:font-semibold hover:text-primary01"
-              onClick={gatherEndDateHandler}
-            >
-              마감순
-            </p>
-            <p
-              className="z-20 cursor-pointer hover:font-semibold hover:text-primary01"
-              onClick={joinHandler}
-            >
-              신청자순
-            </p>
+            {selectedOrderCriteria !== 'createdAt' && (
+              <p
+                className="cursor-pointer hover:font-semibold hover:text-primary01"
+                onClick={createdAtHandler}
+              >
+                최신순
+              </p>
+            )}
+
+            {selectedOrderCriteria !== 'gatherEndDate' && (
+              <p
+                className="z-20 cursor-pointer hover:font-semibold hover:text-primary01"
+                onClick={gatherEndDateHandler}
+              >
+                마감순
+              </p>
+            )}
+            {selectedOrderCriteria !== 'join' && (
+              <p
+                className="z-20 cursor-pointer hover:font-semibold hover:text-primary01"
+                onClick={joinHandler}
+              >
+                신청자순
+              </p>
+            )}
           </section>
         </div>
         <li

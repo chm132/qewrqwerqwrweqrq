@@ -10,6 +10,7 @@ export interface LessonList {
   place: string;
   imageUrl: string;
   description: string;
+  price: number;
 }
 
 export interface CategoryLessonsResponse {

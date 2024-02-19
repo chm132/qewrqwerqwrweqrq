@@ -6,6 +6,7 @@ import { useState } from 'react';
 import LoginModal from '../../Components/AlertModal/LoginModal';
 import CancelModal from '../../Components/AlertModal/CancelModal';
 import ConfirmModal from '../../Components/AlertModal/ConfirmModal';
+import { useScroll } from '../../utils/useScroll';
 
 const LessonPage = () => {
   // 로그인 유도 모달 띄우기
@@ -61,6 +62,8 @@ const LessonPage = () => {
               categoryId={lessonData.categoryId}
               gatherStartDate={lessonData.gatherStartDate}
               gatherEndDate={lessonData.gatherEndDate}
+              lessonStartTime={lessonData.lessonStartTime}
+              lessonEndTime={lessonData.lessonEndTime}
               teacher={lessonData.lessonTeacherList[0].name}
               limitCount={lessonData.limitCount}
               lessonType={lessonData.lessonType}

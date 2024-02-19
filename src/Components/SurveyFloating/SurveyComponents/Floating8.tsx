@@ -150,7 +150,7 @@ function Floating8() {
       <div className="flex flex-col">
         <div className="gap-16 pt-14 pl-14">
           <p className="text-lg font-semibold ">
-            10. 고객님의 주소를 알려주세요.
+            9. 고객님의 주소를 알려주세요.
           </p>
           <div className="flex gap-7 w-[980px] h-[300px]">
             <div className="pt-5 flex flex-col gap-2 w-[264px] h-[250px]">
