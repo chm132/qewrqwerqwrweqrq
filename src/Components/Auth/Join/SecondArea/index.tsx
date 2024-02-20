@@ -1,10 +1,12 @@
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TermsOfUse from './TermsOfUse';
-import { useState } from 'react';
+import TermsOfServiceModal from '../../../AlertModal/SignupModal/RequiredFieldsModal';
 
 const SecondArea = () => {
   const [isChecked, setIsChecked] = useState([false, false, false]);
   const [notChecked, setNotChecked] = useState([true, true, true]);
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 추가
 
   const navigate = useNavigate();
 
@@ -12,6 +14,7 @@ const SecondArea = () => {
     if (isChecked.filter((c) => c === true).length === 3) {
       navigate('/auth/join/3');
     } else {
+      setIsModalOpen(true);
       const newNotChecked = isChecked.map((c, index) => {
         if (!c) {
           return false;
@@ -25,10 +28,14 @@ const SecondArea = () => {
 
   const handleCheckboxChange = (index: number) => {
     setIsChecked((prevChecked) => {
-      const newChecked = [...prevChecked]; // 상태배열값 얕은 복사
-      newChecked[index] = !newChecked[index]; // 해당 배열값 인덱스에 해당하는 값 업데이트
-      return newChecked; // 업데이트된 배열 return
+      const newChecked = [...prevChecked];
+      newChecked[index] = !newChecked[index];
+      return newChecked;
     });
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
@@ -57,6 +64,7 @@ const SecondArea = () => {
       >
         다음
       </button>
+      {isModalOpen && <TermsOfServiceModal onClose={closeModal} />}
     </div>
   );
 };

@@ -30,7 +30,7 @@ const CommunityCard = ({
         {part === 'TOGETHER' ? '같이해요' : '궁금해요'}
       </p>
       <p className="text-2xl font-medium w-fit">{title}</p>
-      <p className="text-xl text-[#B3B3B3]">{truncate(body, 44)}</p>
+      <p className="text-xl text-[#B3B3B3]">{truncate(body, 75)}</p>
       <div className="flex items-center gap-4 text-sm font-medium text-slate-400">
         <span className="flex items-center gap-[2px]">
           <img src="assets/Utils/view.svg" alt="view" className="w-4 h-4" />

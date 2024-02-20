@@ -1,7 +1,3 @@
-interface FileList {
-  filePath: string;
-}
-
 export interface DetailNewsResponse {
   code: string;
   message: string;
@@ -11,7 +7,7 @@ export interface DetailNewsResponse {
     category: string;
     author: string;
     createdAt: string;
-    fileList: FileList[];
+    imageList: { imageUrl: string }[];
     views: number;
   };
 }

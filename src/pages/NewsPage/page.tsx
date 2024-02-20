@@ -44,6 +44,7 @@ const NewsCard = () => {
         {newsData.map((data) => (
           <NewsCards
             key={data.id}
+            imgUrl={data.imageUrl}
             id={data.id}
             part={data.category}
             title={data.title}

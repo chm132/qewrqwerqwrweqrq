@@ -11,7 +11,7 @@ const LessonApply = () => {
   }
 
   if (error) {
-    content = <p>수강 완료한 수업이 존재하지 않습니다.</p>;
+    content = <p>신청 정보가 존재하지 않습니다.</p>;
   }
 
   if (data) {

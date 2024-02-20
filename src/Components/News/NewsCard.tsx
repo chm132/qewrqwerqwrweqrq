@@ -1,9 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import { truncate } from '../../utils/truncate';
-import { fromNow } from '../../utils/dayjs';
+import { fromNowHour } from '../../utils/dayjs';
 
 interface NewsCardProps {
   id: number;
+  imgUrl: string;
   part: string;
   title: string;
   content: string;
@@ -13,6 +14,7 @@ interface NewsCardProps {
 
 const NewsCard = ({
   id,
+  imgUrl,
   part,
   title,
   content,
@@ -38,11 +40,9 @@ const NewsCard = ({
     >
       <div style={{ display: 'flex' }}>
         <img
-          src="/assets/News/postList.svg"
+          src={imgUrl}
           alt="profile"
-          style={{
-            borderRadius: '24px, 0px, 0px, 24px',
-          }}
+          className="w-40 h-[166px] rounded-l-[24px]"
         />
         <div
           className="content"
@@ -93,7 +93,7 @@ const NewsCard = ({
               lineHeight: '19.09px',
             }}
           >
-            {truncate(content, 44)}
+            {truncate(content, 75)}
           </div>
           <div
             className="profile"
@@ -125,7 +125,7 @@ const NewsCard = ({
             >
               {author}
             </span>
-            <span style={{ color: '#B3B3B3' }}> {fromNow(createdAt)}</span>
+            <span style={{ color: '#B3B3B3' }}> {fromNowHour(createdAt)}</span>
           </div>
         </div>
       </div>

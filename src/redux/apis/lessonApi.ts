@@ -96,7 +96,7 @@ export const categoryApi = apiSlice.injectEndpoints({
       }),
     }),
     deleteApply: builder.mutation({
-      invalidatesTags: ['Lesson'],
+      // invalidatesTags: ['Lesson'],
       query: (lessonId) => ({
         method: 'DELETE',
         url: `/lesson/${lessonId}/member`,

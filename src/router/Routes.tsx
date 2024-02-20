@@ -90,7 +90,7 @@ const Routes = () => {
             >
               <div className="flex items-center justify-center gap-2">
                 <section className="w-10 h-10 bg-[#D9D9D9] rounded-full" />
-                <p>{currentUser ? currentUser : '홍길동'}님</p>
+                <p>{currentUser ? currentUser : '손'}님</p>
               </div>
             </TimeLine>
           }

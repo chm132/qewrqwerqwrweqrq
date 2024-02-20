@@ -1,5 +1,3 @@
-import { formatTime } from '../../../utils/dayjs';
-
 interface ProfileProps {
   name: string;
   date: string;

@@ -70,30 +70,41 @@ const FilterBox = ({
             !isClicked && 'hidden'
           }`}
         >
-          <p
-            className="cursor-pointer hover:font-semibold hover:text-primary01"
-            onClick={boardHandler}
-          >
-            공지사항
-          </p>
-          <p
-            className="cursor-pointer hover:font-semibold hover:text-primary01"
-            onClick={healthHandler}
-          >
-            건강정보
-          </p>
-          <p
-            className="cursor-pointer hover:font-semibold hover:text-primary01"
-            onClick={lifeHandler}
-          >
-            생활정보
-          </p>
-          <p
-            className="cursor-pointer hover:font-semibold hover:text-primary01"
-            onClick={recruitHandler}
-          >
-            취업정보
-          </p>
+          {category !== 'BOARD' && (
+            <p
+              className="cursor-pointer hover:font-semibold hover:text-primary01"
+              onClick={boardHandler}
+            >
+              공지사항
+            </p>
+          )}
+
+          {category !== 'HEALTH' && (
+            <p
+              className="cursor-pointer hover:font-semibold hover:text-primary01"
+              onClick={healthHandler}
+            >
+              건강정보
+            </p>
+          )}
+
+          {category !== 'LIFE' && (
+            <p
+              className="cursor-pointer hover:font-semibold hover:text-primary01"
+              onClick={lifeHandler}
+            >
+              생활정보
+            </p>
+          )}
+
+          {category !== 'RECRUIT' && (
+            <p
+              className="cursor-pointer hover:font-semibold hover:text-primary01"
+              onClick={recruitHandler}
+            >
+              취업정보
+            </p>
+          )}
         </section>
       </div>
       <div className="relative w-2/5">

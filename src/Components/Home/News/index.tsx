@@ -1,7 +1,7 @@
 import Header from '../Header';
 import { useNavigate } from 'react-router-dom';
 import { truncate } from '../../../utils/truncate';
-import { fromNow } from '../../../utils/dayjs';
+import { fromNowHour } from '../../../utils/dayjs';
 import { useGetNewsQuery } from '../../../redux/apis/newsApi';
 
 const News = () => {
@@ -35,10 +35,8 @@ const News = () => {
             onClick={() => navigate(`/news/${news.id}`)}
           >
             <img
-              // src={news.filePath}
-              // alt={news.filePath}
-              src={`/assets/News/news${index + 1}.svg`}
-              alt="newsImg"
+              src={news.imageUrl}
+              alt={news.imageUrl}
               style={{
                 width: '103px',
                 height: '103px',
@@ -97,7 +95,7 @@ const News = () => {
                   {news.author}
                 </p>
                 <p style={{ color: '#B3B3B3', lineHeight: '14.32px' }}>
-                  {fromNow(news.createdAt)}
+                  {fromNowHour(news.createdAt)}
                 </p>
               </section>
             </span>

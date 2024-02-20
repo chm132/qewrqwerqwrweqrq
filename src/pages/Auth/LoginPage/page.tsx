@@ -48,12 +48,12 @@ const LoginPage = () => {
         className="object-cover w-32 h-16"
       />
       <form
-        className="flex flex-col justify-center w-[300px] gap-5 mt-10"
+        className="flex flex-col justify-center gap-5 mt-10 w-96"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="relative w-full">
           {errors.email && (
-            <p className="absolute text-sm font-semibold text-rose-500 -bottom-5">
+            <p className="absolute text-sm font-semibold text-rose-500 -bottom-5 left-2">
               {errors.email.message}
             </p>
           )}
@@ -75,13 +75,14 @@ const LoginPage = () => {
         </div>
         <div className="relative w-full">
           {errors.password && (
-            <p className="absolute text-sm font-semibold text-rose-500 -bottom-5">
+            <p className="absolute text-sm font-semibold text-rose-500 -bottom-5 left-2">
               {errors.password.message}
             </p>
           )}
           <input
             {...register('password')}
             placeholder="비밀번호"
+            type="password"
             className={`
                     w-full
                     px-8 
@@ -110,7 +111,7 @@ const LoginPage = () => {
           회원가입
         </p>
       </section>
-      <section className="w-[300px] flex flex-col gap-5 mt-10">
+      <section className="flex flex-col gap-5 mt-10 w-96">
         <img
           src="/assets/Auth/naverLogin.svg"
           alt="naver"

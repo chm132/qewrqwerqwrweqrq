@@ -1,5 +1,8 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { useGetDetailNewsQuery } from '../../redux/apis/newsApi';
+import {
+  useGetDetailNewsQuery,
+  useGetNewsQuery,
+} from '../../redux/apis/newsApi';
 import { IoIosArrowBack } from 'react-icons/io';
 import Profile from '../../Components/News/DetailPage/Profile';
 import './style.css';
@@ -9,108 +12,14 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/effect-fade';
 import 'swiper/css/navigation';
-// import { useState } from 'react';
+import { fromNowHour } from '../../utils/dayjs';
 
-// import { truncate } from '../../utils/truncate';
-// import { NewsDataProps } from '../../types/NewsDataProps';
-
-const NewsData = [
-  {
-    id: 1,
-    img: '/assets/Education/edu1.png',
-    category: '건강 상식',
-    title: '1',
-    profileImg: '/assets/Education/edu1.png',
-    author: '친절한',
-    time: '1시간 전',
-  },
-  {
-    id: 2,
-    img: '/assets/Education/edu1.png',
-    category: '건강 상식',
-    title: '2',
-    profileImg: '/assets/Education/edu1.png',
-    author: '친절한',
-    time: '1시간 전',
-  },
-  {
-    id: 3,
-    img: '/assets/Education/edu1.png',
-    category: '건강 상식',
-    title: '3',
-    profileImg: '/assets/Education/edu1.png',
-    author: '친절한',
-    time: '1시간 전',
-  },
-  {
-    id: 4,
-    img: '/assets/Education/edu1.png',
-    category: '건강 상식',
-    title: 'K강사가 알려주는 스마트한 디지털 활용(스마트폰 초급)',
-    profileImg: '/assets/Education/edu1.png',
-    author: '친절한',
-    time: '1시간 전',
-  },
-  {
-    id: 5,
-    img: '/assets/Education/edu1.png',
-    category: '건강 상식',
-    title: '5',
-    profileImg: '/assets/Education/edu1.png',
-    author: '친절한',
-    time: '1시간 전',
-  },
-  {
-    id: 6,
-    img: '/assets/Education/edu1.png',
-    category: '건강 상식',
-    title: '6',
-    profileImg: '/assets/Education/edu1.png',
-    author: '친절한',
-    time: '1시간 전',
-  },
-  {
-    id: 7,
-    img: '/assets/Education/edu1.png',
-    category: '건강 상식',
-    title: '7',
-    profileImg: '/assets/Education/edu1.png',
-    author: '친절한',
-    time: '1시간 전',
-  },
-  {
-    id: 8,
-    img: '/assets/Education/edu1.png',
-    category: '건강 상식',
-    title: '-8',
-    profileImg: '/assets/Education/edu1.png',
-    author: '친절한',
-    time: '1시간 전',
-  },
-  {
-    id: 9,
-    img: '/assets/Education/edu1.png',
-    category: '건강 상식',
-    title: '9-',
-    profileImg: '/assets/Education/edu1.png',
-    author: '친절한',
-    time: '1시간 전',
-  },
-  {
-    id: 10,
-    img: '/assets/Education/edu1.png',
-    category: '건강 상식',
-    title: '10',
-    profileImg: '/assets/Education/edu1.png',
-    author: '친절한',
-    time: '1시간 전',
-  },
-];
 const DetailPage = () => {
   const newsId = Number(useParams().newsId) || 0;
   const navigate = useNavigate();
 
   const { data, isLoading, error } = useGetDetailNewsQuery(newsId);
+  const { data: NewsData } = useGetNewsQuery({});
 
   let content;
 
@@ -171,23 +80,19 @@ const DetailPage = () => {
                   style={{
                     marginBottom: '32px',
                     fontSize: '18px',
-                    width: '752px',
+                    // width: '752px',
                     lineHeight: '28.8px',
                     color: '#666666',
                   }}
                 >
                   {detailData.content}
                 </p>
-                <img
-                  style={{ marginBottom: '24px' }}
-                  src="/assets/News/post1.svg"
-                  alt="post"
-                />
-                <img
-                  style={{ marginBottom: '32px' }}
-                  src="/assets/News/post2.svg"
-                  alt="post"
-                />
+                {/* {detailData.imageList.map((image) => {
+                  <img src={image} alt=""/>
+                })} */}
+                {detailData.imageList.map((image, index) => (
+                  <img key={index} src={image.imageUrl} alt="post" />
+                ))}
                 <p style={{ textAlign: 'right', color: '#888888' }}>
                   <img
                     src="/assets/News/view.svg"
@@ -236,8 +141,8 @@ const DetailPage = () => {
                 className="swipecontainer"
                 style={{
                   width: '1141px',
-                  height: '404px',
-                  backgroundColor: 'white',
+                  height: '414px',
+                  backgroundColor: 'transparent',
                   margin: '24px auto ',
                 }}
               >
@@ -249,107 +154,76 @@ const DetailPage = () => {
                   slidesPerGroup={4}
                   speed={1000}
                 >
-                  {NewsData.map((news) => (
-                    <SwiperSlide key={news.id}>
+                  {NewsData?.result?.newsList?.map((news) => (
+                    <SwiperSlide key={news?.id}>
                       <div
-                        className="transition-all cursor-pointer hover:scale-105 hover:ease-in-out"
-                        style={{
-                          width: '258px',
-                          height: '388px',
-                          borderRadius: '22.6px',
-                          backgroundColor: '#D9D9D9',
-                          margin: '8px',
-                          paddingTop: '258px',
-                          boxShadow: '0 6px 10px rgba(80, 55, 18, 0.15)',
-                        }}
+                        className="relative w-[274px] h-[404px] rounded-[18px] shadow-lg cursor-pointer hover:scale-95 hover:ease-in-out transition-all"
+                        onClick={() => navigate(`/news/${news?.id}`)}
                       >
-                        <div
-                          className="footer"
-                          style={{
-                            width: '258px',
-                            height: '130px',
-                            borderBottomRightRadius: '20px',
-                            borderBottomLeftRadius: '20px',
-                            backgroundColor: '#FFFFFF',
-                          }}
-                        >
-                          <div
+                        <img
+                          src={news.imageUrl}
+                          alt="lesson-img"
+                          className="object-cover w-60 h-60 rounded-t-[18px]"
+                        />
+                        <section className="w-full p-4">
+                          <p
                             style={{
-                              paddingTop: '12px ',
-                              paddingLeft: '16px',
+                              height: '17px',
+                              fontSize: '14px',
+                              fontWeight: '500',
+                              color: '#EC9D26',
+                              lineHeight: '16.71px',
+                              marginBottom: '8px',
                             }}
                           >
-                            <p
+                            {news.category === 'BOARD'
+                              ? '공지사항'
+                              : 'HEALTH'
+                                ? '건강정보'
+                                : 'LIFE'
+                                  ? '생활정보'
+                                  : '취업정보'}
+                          </p>
+                          <p className="mb-2">{news.title}</p>
+                          <section
+                            className="author"
+                            style={{
+                              width: 'auto',
+                              height: '24px',
+                              fontSize: '12px',
+                              display: 'flex',
+                              alignItems: 'center',
+                            }}
+                          >
+                            <img
+                              src={`/assets/Teacher/teacher1.svg`}
+                              alt="authorImg"
                               style={{
-                                height: '17px',
-                                fontSize: '14px',
-                                fontWeight: '500',
-                                color: '#EC9D26',
-                                lineHeight: '16.71px',
-                                marginBottom: '8px',
-                              }}
-                            >
-                              {news.category}
-                            </p>
-                            <p
-                              style={{
-                                width: '226px',
-                                height: '48px',
-                                color: '#1A1A1A',
-                                fontSize: '16px',
-                                lineHeight: '24px',
-                                fontWeight: '500',
-
-                                marginBottom: '8px',
-                                cursor: 'pointer',
-                              }}
-                              className="hover:underline hover:decoration-4 w-fit"
-                            >
-                              {news.title}
-                            </p>
-
-                            <section
-                              className="author"
-                              style={{
-                                width: 'auto',
+                                width: '24px',
                                 height: '24px',
-                                fontSize: '12px',
-                                display: 'flex',
-                                alignItems: 'center',
+                                borderRadius: '50%',
+                                marginRight: '8px',
+                              }}
+                            />
+                            <p
+                              style={{
+                                marginRight: '8px',
+                                color: '#808080',
+                                lineHeight: '14.32px',
                               }}
                             >
-                              <img
-                                // src={news.writerProfile}
-                                // alt={news.writerProfile}
-                                src={`/assets/Teacher/teacher1.svg`}
-                                alt="authorImg"
-                                style={{
-                                  width: '24px',
-                                  height: '24px',
-                                  borderRadius: '50%',
-                                  marginRight: '8px',
-                                }}
-                              />
-                              <p
-                                style={{
-                                  marginRight: '8px',
-                                  color: '#808080',
-                                  lineHeight: '14.32px',
-                                }}
-                              >
-                                {news.author}
-                              </p>
-                              <p
-                                style={{
-                                  color: '#B3B3B3',
-                                  lineHeight: '14.32px',
-                                }}
-                              >
-                                {news.time}
-                              </p>
-                            </section>
-                          </div>
-                        </div>
+                              {news.author}
+                            </p>
+                            <p
+                              style={{
+                                color: '#B3B3B3',
+                                lineHeight: '14.32px',
+                              }}
+                            >
+                              {fromNowHour(news.createdAt)}
+                            </p>
+                          </section>
+                        </section>
                       </div>
                     </SwiperSlide>
                   ))}

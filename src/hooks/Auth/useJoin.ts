@@ -1,7 +1,13 @@
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { RootState } from '../../redux/store';
 
 export const useJoin = () => {
+  const phoneNumber = useSelector(
+    (state: RootState) => state.joinPhone.phoneNum,
+  );
+
   const navigate = useNavigate();
   const signUp = async (data: any) => {
     if (data) {
@@ -25,7 +31,7 @@ export const useJoin = () => {
           email: emailAddress,
           password,
           name,
-          phoneNum: '',
+          phoneNum: phoneNumber,
           birthYear,
           address: district + ' ' + city + ' ' + neighborhood,
           gender: gender.toUpperCase(),

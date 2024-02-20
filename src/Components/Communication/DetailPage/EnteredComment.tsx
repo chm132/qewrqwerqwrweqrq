@@ -14,6 +14,7 @@ const EnteredComment = ({ left }: EnteredCommentProps) => {
 
   const postHandler = async () => {
     await postComment({ communityId, content: enteredComment });
+    setEnteredComment('');
   };
 
   return (
@@ -37,7 +38,7 @@ const EnteredComment = ({ left }: EnteredCommentProps) => {
       <img
         src="/assets/Utils/dummyProfile2.svg"
         alt="profile"
-        className={`absolute w-8 h-8 left-5 top-5 ${left && 'left-16'}`}
+        className={`absolute w-8 h-8 left-5 top-5 ${left && 'left-[65px]'}`}
       />
     </section>
   );

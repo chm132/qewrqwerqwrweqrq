@@ -6,16 +6,17 @@ interface ContentsProps {
   name: string;
   content: string;
   likes: number;
+  date: string;
 }
 
-const Contents = ({ name, content, likes }: ContentsProps) => {
+const Contents = ({ name, content, likes, date }: ContentsProps) => {
   const [showComment, setShowComment] = useState(false);
   return (
     <>
       <Profile
         name={name}
-        // date={comment.createdAt}
-        date="2024-02-07T22:56:48"
+        date={date}
+        // date="2024-02-07T22:56:48"
         small
       />
       <p>{content}</p>

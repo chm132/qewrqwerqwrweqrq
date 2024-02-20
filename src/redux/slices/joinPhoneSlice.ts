@@ -12,7 +12,7 @@ const joinPhoneSlice = createSlice({
   name: 'joinPhone',
   initialState,
   reducers: {
-    // 인증번호가 확인이 되면 dispatch
+    // 번호 입력하면 바로 dispatch
     setPhoneNum: (state, action: PayloadAction<JoinStateProps>) => {
       state.phoneNum = action.payload.phoneNum;
     },

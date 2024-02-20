@@ -57,18 +57,23 @@ const FilterBox = ({
             !isClicked && 'hidden'
           }`}
         >
-          <p
-            className="cursor-pointer hover:font-semibold hover:text-primary01"
-            onClick={questionHandler}
-          >
-            궁금해요
-          </p>
-          <p
-            className="cursor-pointer hover:font-semibold hover:text-primary01"
-            onClick={togetherHandler}
-          >
-            같이해요
-          </p>
+          {category !== 'QUESTION' && (
+            <p
+              className="cursor-pointer hover:font-semibold hover:text-primary01"
+              onClick={questionHandler}
+            >
+              궁금해요
+            </p>
+          )}
+
+          {category !== 'TOGETHER' && (
+            <p
+              className="cursor-pointer hover:font-semibold hover:text-primary01"
+              onClick={togetherHandler}
+            >
+              같이해요
+            </p>
+          )}
         </section>
       </div>
       <div className="relative w-2/5">

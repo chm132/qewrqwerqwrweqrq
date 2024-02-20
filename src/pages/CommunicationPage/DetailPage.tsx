@@ -71,6 +71,7 @@ const DetailPage = () => {
                     name={comment.memberName}
                     content={comment.content}
                     likes={comment.likeCounts}
+                    date={comment.createdAt}
                   />
                 </div>
               ))}

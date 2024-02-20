@@ -4,8 +4,6 @@ import { GoSearch } from 'react-icons/go';
 import { MdKeyboardArrowRight } from 'react-icons/md';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { transKrCategoryId } from '../../utils/transKrCategoryId';
-import { ResultList } from '../../types/Response/Survey/SurveyLessonType';
 
 interface FilterBoxProps {
   fix: boolean;

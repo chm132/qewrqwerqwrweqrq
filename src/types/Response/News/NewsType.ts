@@ -1,11 +1,11 @@
-interface NewsList {
+export interface NewsList {
   id: number;
   createdAt: string;
   category: string;
   title: string;
   content: string;
   author: string;
-  filePath: string;
+  imageUrl: string;
 }
 
 export interface NewsResponse {
