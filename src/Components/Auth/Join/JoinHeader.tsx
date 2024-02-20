@@ -8,7 +8,7 @@ const JoinHeader = ({ step }: JoinHeaderProps) => {
       <div className="flex justify-between h-16 font-semibold bg-[#F2F2F2] border-2 rounded-l-full rounded-r-full mt-10">
         <span className="flex items-center justify-center">
           <section
-            className={`py-5 text-center w-72 ${
+            className={`py-5 text-center w-80 ${
               step === 1 &&
               'bg-primary01 text-white rounded-l-full rounded-r-full'
             } `}
@@ -19,7 +19,7 @@ const JoinHeader = ({ step }: JoinHeaderProps) => {
 
         <span className="flex items-center justify-center">
           <section
-            className={`py-5 text-center w-72 ${
+            className={`py-5 text-center w-80 ${
               step === 2 &&
               'bg-primary01 text-white rounded-l-full rounded-r-full'
             } `}
@@ -30,7 +30,7 @@ const JoinHeader = ({ step }: JoinHeaderProps) => {
 
         <span className="flex items-center justify-center">
           <section
-            className={`py-5 text-center w-72 ${
+            className={`py-5 text-center w-80 ${
               step === 3 &&
               'bg-primary01 text-white rounded-l-full rounded-r-full'
             } `}

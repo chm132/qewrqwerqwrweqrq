@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TermsOfUse from './TermsOfUse';
-import TermsOfServiceModal from '../../../AlertModal/SignupModal/RequiredFieldsModal';
+import TermsOfServiceModal from '../../../AlertModal/SignupModal/TermsOfServiceModal';
+
 
 const SecondArea = () => {
   const [isChecked, setIsChecked] = useState([false, false, false]);

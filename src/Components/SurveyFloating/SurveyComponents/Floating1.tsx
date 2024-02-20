@@ -8,7 +8,7 @@ function Floating1() {
   };
 
   return (
-    <div className={`relative top-[158px] left-[326px] `}>
+    <div className={`relative top-[158px] left-[305px] `}>
       <p className=" text-[32px] font-semibold text-center">
         고객님께 딱 맞는 교육을 찾아드릴게요!
       </p>

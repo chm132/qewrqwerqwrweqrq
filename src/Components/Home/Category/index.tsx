@@ -66,7 +66,7 @@ export const CATEGORIES = [
 const Category = () => {
   const navigate = useNavigate();
   return (
-    <div className="grid content-around w-full grid-cols-6 gap-5 py-10 overflow-y-auto bg-gray-100 px-28">
+    <div className="grid content-around w-full grid-cols-6 gap-5 gap-x-[60px] py-10 overflow-y-auto bg-gray-100 px-28">
       {CATEGORIES.map((c) => (
         <div
           key={c.id}

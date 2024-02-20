@@ -41,7 +41,7 @@ const LoginModal = ({ home, controlModal, like }: LoginModalProps) => {
         <div
           className={`
           ${home ? '-top-80 left-96' : 'top-[20%] left-[30%]'}
-          flex-col gap-4 px-32 pt-16 absolute z-40 flex bg-white h-80 w-[640px] rounded-3xl
+          flex-col gap-4 px-32 pt-12 absolute z-40 flex bg-white h-80 w-[700px] rounded-3xl
         `}
         >
           <p className="text-[#333333] font-semibold text-2xl">
@@ -49,7 +49,7 @@ const LoginModal = ({ home, controlModal, like }: LoginModalProps) => {
               ? '로그인하고 마음에 드는 수업 찜하기!'
               : '로그인 하면 더 편하게 이용할 수 있어요'}
           </p>
-          <section className="flex items-center gap-4">
+          <section className="flex items-center gap-4 mt-2">
             <img src="/assets/Modal/modalCheck.svg" alt="check" />
             <p className="text-[#666666] font-medium text-lg">
               나한테 딱! 맞는 교육을 추천받아요

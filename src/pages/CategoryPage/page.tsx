@@ -73,7 +73,7 @@ const CategoryPage = () => {
 
     content = (
       <div className="bg-gray-100">
-        <section className="grid grid-cols-4 gap-8 py-12 px-36">
+        <section className="grid grid-cols-4 gap-8 py-12 px-44">
           {lessonData.map((lesson, index) => (
             <LessonCard
               key={index}

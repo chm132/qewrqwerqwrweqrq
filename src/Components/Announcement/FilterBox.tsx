@@ -90,12 +90,12 @@ const FilterBox = ({
     <section
       className={`
       ${fix && 'fixed top-0 left-0 right-0 z-40 bg-white'}
-      flex items-center justify-between w-full h-20 text-center px-36 `}
+      flex items-center justify-between w-full h-20 text-center px-60 `}
     >
       <ul className="grid grid-cols-3 font-medium">
         <div className="relative flex items-center font-medium text-center">
           <section
-            className="flex items-center justify-center w-40 gap-1 text-gray-500 cursor-pointer"
+            className="flex items-center justify-center w-40 gap-1 text-gray-500 cursor-pointer hover:opacity-80"
             onClick={() => setIsClicked(!isClicked)}
           >
             <p className="text-lg">
